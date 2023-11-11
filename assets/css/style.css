@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Tajawal&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+   --c1: #fff;
+   --c2: #000;
+
+   --c3: #f3f3f3;
+
+   --c4: #68cbdb;
+   --c5: #54a4b1;
+
+   --c6: #6d6e70;
+   --c7: #494949;
+
+   --c8: #a70000;
+   --c9: #790000;
+
+   /* --color-1-l2: #79eafc;
+   --color-1-l1: #73ddee;
+   --color-1: #68cbdb;
+   --color-1-d1: #54a4b1;
+   --color-1-d2: #4e98a3;
+
+   --color-2-l1: #868788;
+   --color-2: #6d6e70;
+   --color-2-d1: #7b7c7c;
+   --color-2-d2: #494949; */
+}
+
+/* Code for Firefox */
+::-moz-selection {
+   color: var(--c1);
+   background: var(--c6);
+}
+
+::selection {
+   color: var(--c1);
+   background: var(--c6);
+}
+
+svg {
+   display: inline;
+}
+
+/* Code for Firefox */
+* {
+   scrollbar-width: thin;
+   scrollbar-color: var(--c6) var(--c3);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+   width: 7px;
+}
+
+*::-webkit-scrollbar-track {
+   background: var(--c3);
+}
+
+*::-webkit-scrollbar-thumb {
+   background-color: var(--c6);
+}
+
+body {
+   font-family: "Tajawal", sans-serif;
+   color: var(--c7);
+}
+
+* {
+   font-size: 1.1rem;
+}
+
+label {
+   display: block;
+   margin-bottom: 0.5rem;
+}
+
+textarea,
+input {
+   outline: none;
+   border: none;
+   display: block;
+   width: 100%;
+   background-color: var(--c1);
+   padding: 0.5rem;
+   border-radius: 0.25rem;
+}
