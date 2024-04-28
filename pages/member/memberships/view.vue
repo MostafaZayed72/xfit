@@ -138,7 +138,7 @@ onBeforeMount(() => {
 });
 const PayMehtod = ref('creditCard')
 const membership = ref();
-
+const currentLanguage = useCookie("lang");
 
 
 const getMembership = () => {
@@ -161,7 +161,15 @@ watch(()=>membership.value,()=>{
    // console.log(membership.value);
    const {data} = membership.value
       console.log(data.price);
-      tabbyCard.tabbyCard('SAR',data.price,'en')
+      tabbyCard.tabbyCard('SAR',data?.price,currentLanguage.value)
+   
+
+});
+watch(()=>currentLanguage.value,()=>{
+   // console.log(membership.value);
+   const {data} = membership.value
+      console.log('change language');
+      tabbyCard.tabbyCard('SAR',data?.price,currentLanguage.value)
    
 
 });
@@ -169,7 +177,7 @@ watch(()=>membership.value,()=>{
 watch(()=>PayMehtod.value,()=>{
    if(PayMehtod.value === 'tabby'){
       const {data} = membership.value
-      tabbyCard.tabbyCard('SAR',data.price,'en')
+      tabbyCard.tabbyCard('SAR',data?.price,currentLanguage.value)
    }
 })
 

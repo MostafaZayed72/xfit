@@ -1,7 +1,31 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+
 export default defineNuxtConfig({
    devtools: { enabled: true },
+   build: {
+      transpile: ['vuetify','@fortawesome/fontawesome-free'],
+    },
+    
+    plugins: ['~/plugins/axios'],
+    modules: ['nuxt-icon',
+      (_options, nuxt) => {
+        nuxt.hooks.hook('vite:extendConfig', (config) => {
+          // @ts-expect-error
+          config.plugins.push(vuetify({ autoImport: true }))
+        })
+      },
+      //...
+    ],
+    vite: {
+      vue: {
+        template: {
+          transformAssetUrls,
+        },
+      },
+    },
    css: [
+      '@fortawesome/fontawesome-free/css/all.css',
       "@/node_modules/vue-select/dist/vue-select.css",
       "@/assets/css/style.css",
       "@/assets/css/payment.css",

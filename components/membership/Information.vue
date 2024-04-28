@@ -49,10 +49,20 @@ import * as tabbyPromo from "@/utils/tabbySnippet";
 const props = defineProps(["membership"]);
 const { $t } = useNuxtApp();
 
+const currentLanguage = useCookie("lang");
 
 onMounted(()=>{
    const price = props.membership?.price
-   const lang = $t("en", "ar") 
-   tabbyPromo.tabbysnippet('SAR',price,lang)
+   //const lang = $t("en", "ar") 
+
+   tabbyPromo.tabbysnippet('SAR',price,currentLanguage.value)
 })
+
+watch(()=>currentLanguage.value,()=>{
+   const price = props.membership?.price
+
+   tabbyPromo.tabbysnippet('SAR',price,currentLanguage.value)
+   console.log(currentLanguage.value)
+
+});
 </script>

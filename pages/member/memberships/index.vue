@@ -6,7 +6,7 @@
          <span>{{ $t("My memberships", "اشتراكاتي") }}</span>
       </p>
 
-      <CommonXfitLoader v-if="memberships?.isLoading" />
+      <!-- <CommonXfitLoader v-if="memberships?.isLoading" /> -->
 
       <a
          href="javascript:;"
