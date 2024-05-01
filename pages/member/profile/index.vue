@@ -1,14 +1,14 @@
 <template>
    <main>
-      <p class="mb-12">
-         <NuxtLink to="/">{{ $t("Home", "الرئيسية") }}</NuxtLink>
-         <span class="mx-2">/</span>
-         <span>{{ $t("Profile", "الملف الشخصي") }}</span>
-      </p>
-
+      <div class="text-5xl text-center mship md:mb-16">
+         <NuxtLink class="text-5xl" to="/">{{ $t("Home", "الرئيسية") }}</NuxtLink>
+         <span class="mx-2 text-5xl">/</span>
+         <span class="text-5xl">{{ $t("Profile", "الملف الشخصي") }}</span>
+      </div>
+      <hr class="my-5" />
       <CommonXfitLoader v-if="profile?.isLoading && !profile?.data" />
 
-      <section class="bg-[var(--c3)] rounded-xl mb-4 shadow-lg p-5" v-else>
+      <section class="main-card rounded-xl mb-4 shadow-lg p-5" v-else>
          <div class="mb-5">
             <label class="text-sm mb-1">
                {{ $t("First name", "الاسم الاول") }}
