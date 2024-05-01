@@ -3,27 +3,34 @@ import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
    devtools: { enabled: true },
+   base: '/nuxt-app/',
    build: {
-      transpile: ['vuetify','@fortawesome/fontawesome-free'],
-    },
-    
-    plugins: ['~/plugins/axios'],
-    modules: ['nuxt-icon',
+      transpile: ['vuetify', '@fortawesome/fontawesome-free'],
+   },
+   css: [
+      '@nuxtjs/tailwindcss',
+      {
+         exposeConfig: true,
+         config: './tailwind.config.js',
+      },
+   ],
+
+   modules: ['@nuxtjs/tailwindcss','nuxt-icon', 
       (_options, nuxt) => {
-        nuxt.hooks.hook('vite:extendConfig', (config) => {
-          // @ts-expect-error
-          config.plugins.push(vuetify({ autoImport: true }))
-        })
+         nuxt.hooks.hook('vite:extendConfig', (config) => {
+            // @ts-expect-error
+            config.plugins.push(vuetify({ autoImport: true }))
+         })
       },
       //...
-    ],
-    vite: {
+   ],
+   vite: {
       vue: {
-        template: {
-          transformAssetUrls,
-        },
+         template: {
+            transformAssetUrls,
+         },
       },
-    },
+   },
    css: [
       '@fortawesome/fontawesome-free/css/all.css',
       "@/node_modules/vue-select/dist/vue-select.css",
@@ -76,7 +83,7 @@ export default defineNuxtConfig({
          tailwindcss: {},
          autoprefixer: {},
       },
-   },ssr: false 
+   }, ssr: false
    // routeRules: {
    //    "/member/**": { ssr: false },
    // },

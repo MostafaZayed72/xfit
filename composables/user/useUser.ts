@@ -57,8 +57,7 @@ export const saveLoginData = (user: any) => {
    authenticated.value = "true";
    username.value = user.user_name;
    accessToken.value = user.access_token;
-   location.reload();
-};
+   navigateTo('/')};
 
 export const logout = () => {
    const authenticated = useCookie("authenticated");

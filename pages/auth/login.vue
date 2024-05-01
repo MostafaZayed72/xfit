@@ -10,7 +10,7 @@
                type="text"
                class="w-full h-12 bg-[var(--c3)]"
                :placeholder="$t('Email or mobile phone', 'البريد الالكتروني او الجوال')"
-               v-model="user.emailOrMobilePhone"
+               v-model="user.first_value"
                autofocus
             />
          </div>
@@ -45,7 +45,7 @@ import { login, saveLoginData } from "@/composables/user/useUser";
 definePageMeta({ layout: "auth" });
 
 const user = ref({
-   emailOrMobilePhone: "",
+   first_value: "",
    password: "",
 });
 
