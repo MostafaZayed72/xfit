@@ -33,6 +33,7 @@
                   >
                      {{ $t('Choose the package', 'اختيار الباقة') }}
                   </button>
+                  test
                </div>
             </div>
          </div>
