@@ -15,7 +15,7 @@ export default defineNuxtConfig({
       },
    ],
 
-   modules: ['@nuxtjs/tailwindcss','nuxt-icon', 
+   modules: ['@nuxtjs/tailwindcss','@nuxtjs/color-mode','nuxt-icon', 
       (_options, nuxt) => {
          nuxt.hooks.hook('vite:extendConfig', (config) => {
             // @ts-expect-error

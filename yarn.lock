@@ -863,6 +863,16 @@
     consola "^2.15.3"
     defu "^5.0.0"
 
+"@nuxtjs/color-mode@^3.4.1":
+  version "3.4.1"
+  resolved "https://registry.npmjs.org/@nuxtjs/color-mode/-/color-mode-3.4.1.tgz"
+  integrity sha512-vZgJqDstxInGw3RGSWbLoCLXtU1mvh1LLeuEA/X3a++DYA4ifwSbNoiSiOyb9qZHFEwz1Xr99H71sXV4IhOaEg==
+  dependencies:
+    "@nuxt/kit" "^3.11.2"
+    pathe "^1.1.2"
+    pkg-types "^1.1.0"
+    semver "^7.6.0"
+
 "@nuxtjs/proxy@^2.1.0":
   version "2.1.0"
   resolved "https://registry.npmjs.org/@nuxtjs/proxy/-/proxy-2.1.0.tgz"

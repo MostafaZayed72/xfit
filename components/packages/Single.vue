@@ -1,9 +1,9 @@
 <template>
     <main>
      
-      <div class="row flex gap-5 flex-wrap justify-center">
+      <div class="row flex gap-5 flex-wrap justify-center ">
          <div
-            class="col-sm-6 col-md-4 mb-4 bg-grey-lighten-3 rounded text-grey-darken-1 sm:w-100 lg:w-1/3"
+            class="col-sm-6 col-md-4 mb-4  rounded  sm:w-100 lg:w-1/3 main-card"
             v-for="the_package in packages?.data"
             :key="the_package.id"
          >
@@ -19,7 +19,7 @@
                <p class="text-2xl">{{ $t('Branches') }}</p>
                <div class="mb-3 flex gap-1 justify-center flex-wrap text-center">
                   <h1
-                     class="badge bg-cyan-500 text-white text-center px-1  rounded-lg"
+                     class="badge bg-cyan-500 choose text-center px-1  rounded-lg"
                      v-for="branch in the_package.branches"
                      :key="branch.name"
                   >
@@ -28,12 +28,11 @@
                </div>
                <div class="bg-cyan-400 rounded">
                   <button
-                     class="btn btn-primary text-2xl text-black "
+                     class="btn btn-primary text-2xl choose "
                      @click="viewPackage(the_package.id)"
                   >
                      {{ $t('Choose the package', 'اختيار الباقة') }}
                   </button>
-                  test
                </div>
             </div>
          </div>
