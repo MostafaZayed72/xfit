@@ -33,6 +33,7 @@
                   <Icon class="text-3xl" name="material-symbols:person-rounded" /> <span class="hidden md:block">Mostafa Zayed</span>
                   <Icon name="ion:md-arrow-dropdown" />
                </div>
+               <ScrollToTop />
             </span>
          </div>
       </div>

@@ -1,6 +1,6 @@
 <template>
    <main>
-      <h3 class="text-5xl text-center mship mb-16">
+      <h3 class="text-5xl text-center mship md:mb-16">
          {{ $t('Membership packages', 'باقات الإشتراك') }}
       </h3>
       <hr class="my-5" />

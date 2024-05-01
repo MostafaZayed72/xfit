@@ -1,30 +1,25 @@
 <template>
+   <div class=" text-center mship md:mb-16">
+      <NuxtLink class="sm:text-sm md:text-5xl" to="/">{{ $t("Home", "الرئيسية") }}</NuxtLink>
+      <span class="mx-2 text-sm md:text-5xl">/</span>
+      <NuxtLink to="/packages" class="text-sm md:text-5xl">
+         {{ $t("Membership packages", "باقات الاشتراك") }}
+      </NuxtLink>
+      <span class="mx-2 text-sm md:text-5xl">/</span>
+      <span class="text-sm md:text-5xl">{{ $t("Buy a package", "شراء باقة") }}</span>
+   </div>
+   <hr class="my-5" />
    <main>
-      <p class="mb-12">
-         <NuxtLink to="/">{{ $t("Home", "الرئيسية") }}</NuxtLink>
-         <span class="mx-2">/</span>
-         <NuxtLink to="/packages">
-            {{ $t("Membership packages", "باقات الاشتراك") }}
-         </NuxtLink>
-         <span class="mx-2">/</span>
-         <span>{{ $t("Buy a package", "شراء باقة") }}</span>
-      </p>
+      <CommonXfitLoader v-if="
+         (thePackage?.isLoading || memberInformationIsRequired?.isLoading) &&
+         (!thePackage?.isFinished ||
+            !memberInformationIsRequired?.isFinished)
+      " />
 
-      <CommonXfitLoader
-         v-if="
-            (thePackage?.isLoading || memberInformationIsRequired?.isLoading) &&
-            (!thePackage?.isFinished ||
-               !memberInformationIsRequired?.isFinished)
-         "
-      />
-
-      <div
-         class="bg-[var(--c9)] mb-5 p-5 shadow-lg rounded-xl"
-         v-if="
-            memberInformationIsRequired?.isFinished &&
-            memberInformationIsRequired?.data
-         "
-      >
+      <div class="bg-[var(--c9)] mb-5 p-5 shadow-lg rounded-xl" v-if="
+         memberInformationIsRequired?.isFinished &&
+         memberInformationIsRequired?.data
+      ">
          <p class="mb-3 text-[var(--c1)]">
             {{
                $t(
@@ -42,19 +37,13 @@
             }}
          </p>
          <p class="text-end">
-            <ButtonsSecondary
-               class="w-56 bg-[var(--c7)]"
-               @click="navigateTo('/member/profile')"
-            >
+            <ButtonsSecondary class="w-56 bg-[var(--c7)]" @click="navigateTo('/member/profile')">
                {{ $t("Go to your profile", "الذهاب إلى ملفك الشخصي") }}
             </ButtonsSecondary>
          </p>
       </div>
 
-      <div
-         v-if="thePackage?.data"
-         class="bg-[var(--c3)] rounded-xl shadow-lg p-5"
-      >
+      <div v-if="thePackage?.data" class="main-card rounded-xl shadow-lg p-5">
          <p class="mb-5">{{ thePackage.data.name }}</p>
          <h3 class="mb-4">
             <span class="font-bold text-4xl me-2">
@@ -63,11 +52,7 @@
             <span>{{ $t("SAR", "ريال") }}</span>
          </h3>
          <div class="text-end">
-            <a
-               href="javascript:;"
-               class="w-36 underline text-sm"
-               @click="navigateTo('/packages')"
-            >
+            <a href="javascript:;" class="w-36 underline text-sm" @click="navigateTo('/packages')">
                {{ $t("Choose another package", "اختاري باقة اخري") }}
             </a>
          </div>
@@ -79,13 +64,8 @@
                {{ $t("Choose a branch", "اختاري الفرع") }}
             </p>
             <div class="flex flex-wrap gap-3 mb-8">
-               <a
-                  href="javascript:;"
-                  class="text-[var(--c2)] bg-[var(--c1)] py-1 px-2 rounded-xl"
-                  v-for="branch in thePackage.data.branches"
-                  :key="branch.name"
-                  @click="selectBranch(branch)"
-               >
+               <a href="javascript:;" class="bg-cyan-500 choose py-1 px-2 rounded-xl"
+                  v-for="branch in thePackage.data.branches" :key="branch.name" @click="selectBranch(branch)">
                   {{ branch.name }}
                </a>
             </div>
@@ -93,16 +73,10 @@
 
          <div v-else class="mb-3">
             <span class="inline-block me-2">{{ $t("Branch", "الفرع") }}</span>
-            <span
-               class="inline-block text-[var(--c2)] bg-[var(--c1)] py-1 px-2 me-2 rounded-xl"
-            >
+            <span class="inline-block text-[var(--c2)] bg-[var(--c1)] py-1 px-2 me-2 rounded-xl">
                {{ selectedBranch.name }}
             </span>
-            <a
-               href="javascript:;"
-               class="inline-block underline text-sm"
-               @click="selectedBranch = null"
-            >
+            <a href="javascript:;" class="inline-block underline text-sm" @click="selectedBranch = null">
                {{ $t("Change", "تغيير") }}
             </a>
          </div>
@@ -113,22 +87,13 @@
             <label class="block mb-2">
                {{ $t("Membership start date", "تاريخ بداية الاشتراك") }}
             </label>
-            <input
-               type="date"
-               class="w-full bg-[var(--c1)]"
-               :min="thePackage.data.min_membership_start_date"
-               :max="thePackage.data.max_membership_start_date"
-               v-model="newMembership.membership_start_date"
-            />
+            <input type="date" class="w-full bg-[var(--c1)] text-black" :min="thePackage.data.min_membership_start_date"
+               :max="thePackage.data.max_membership_start_date" v-model="newMembership.membership_start_date" />
          </div>
 
-         <div class="text-end">
-            <ButtonsPrimary
-               class="w-20"
-               :isLoading="createMembershipRequest?.isLoading"
-               :disabled="memberInformationIsRequired?.data"
-               @click="createMembership()"
-            >
+         <div class="text-end ">
+            <ButtonsPrimary class="w-20 bg-cyan-400 choose" :isLoading="createMembershipRequest?.isLoading"
+               :disabled="memberInformationIsRequired?.data" @click="createMembership()">
                {{ $t("Confirm", "تأكيد") }}
             </ButtonsPrimary>
          </div>

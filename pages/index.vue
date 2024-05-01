@@ -22,6 +22,7 @@
                to="/member/profile">
                {{ $t("My profile", "الملف الشخصي") }}
             </nuxt-link>
+            
          </div>
       </div>
    </div>
