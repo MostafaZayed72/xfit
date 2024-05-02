@@ -1,33 +1,20 @@
 <template>
    <main>
-      <p class="mb-12">
-         <NuxtLink to="/">{{ $t("Home", "الرئيسية") }}</NuxtLink>
-         <span class="mx-2">/</span>
-         <span>{{ $t("My memberships", "اشتراكاتي") }}</span>
-      </p>
-
+      <h3 class="text-5xl text-center mship md:mb-16">
+         {{ $t("My memberships", "اشتراكاتي") }} </h3>
+      <hr class="my-5" />
       <!-- <CommonXfitLoader v-if="memberships?.isLoading" /> -->
 
-      <a
-         href="javascript:;"
-         class="block bg-[var(--c3)] rounded-xl p-4 mb-5 hover:shadow-lg"
-         v-for="membership in memberships?.data"
-         :key="membership.id"
-         @click="viewMembership(membership.id)"
-      >
+      <a href="javascript:;" class="block main-card rounded-xl p-4 mb-5 hover:shadow-lg"
+         v-for="membership in memberships?.data" :key="membership.id" @click="viewMembership(membership.id)">
          <div class="text-center">
             <div class="col-12 col-sm-3 my-2">
                <span>{{ membership.name }}</span>
-               <span
-                  v-if="
-                     !membership.membershipTapPayments &&
-                     !membership.membershipTamaraPayments
-                  "
-               >
-                  <span
-                     class="text-[var(--c1)] bg-[var(--c6)] py-1 px-2 rounded-lg"
-                     v-if="!membership.package_status"
-                  >
+               <span v-if="
+                  !membership.membershipTapPayments &&
+                  !membership.membershipTamaraPayments
+               ">
+                  <span class="text-[var(--c1)] bg-[var(--c6)] py-1 px-2 rounded-lg" v-if="!membership.package_status">
                      {{
                         $t(
                            "The package isn't available now.",
@@ -44,16 +31,11 @@
             <div class="col-6 col-sm-3 my-2">
                <span dir="ltr">{{ membership.created_at }}</span>
             </div>
-            <div
-               class="col-12 col-sm-3 my-2"
-               v-if="
-                  !membership.membershipTapPayments &&
-                  !membership.membershipTamaraPayments
-               "
-            >
-               <span
-                  class="text-[var(--c1)] bg-[var(--c9)] py-1 px-2 rounded-lg"
-               >
+            <div class="col-12 col-sm-3 my-2" v-if="
+               !membership.membershipTapPayments &&
+               !membership.membershipTamaraPayments
+            ">
+               <span class="text-[var(--c1)] bg-[var(--c9)] py-1 px-2 rounded-lg">
                   {{ $t("Not paid", "غير مدفوع") }}
                </span>
             </div>

@@ -1,43 +1,43 @@
 <template>
    <main>
-      <p class="mb-12 leading-10">
-         <NuxtLink to="/">{{ $t("Home", "الرئيسية") }}</NuxtLink>
-         <span class="mx-2">/</span>
-         <NuxtLink to="/member/memberships">
-            {{ $t("My memberships", "اشتراكاتي") }}
-         </NuxtLink>
-         <span class="mx-2">/</span>
-         <span>{{ $t("Membership information", "معلومات اشتراك") }}</span>
-      </p>
-
+      <div class="text-center mship md:mb-16">
+         <p class=" leading-10">
+            <NuxtLink class="text-sm md:text-5xl" to="/">{{ $t("Home", "الرئيسية") }}</NuxtLink>
+            <span class="mx-2 text-sm md:text-5xl">/</span>
+            <NuxtLink class="text-sm md:text-5xl" to="/member/memberships">
+               {{ $t("My memberships", "اشتراكاتي") }}
+            </NuxtLink>
+            <span class="mx-2  text-sm md:text-5xl">/</span>
+            <span class="text-sm md:text-5xl">{{ $t("Membership information", "معلومات اشتراك") }}</span>
+         </p>
+      </div>
+      <hr class="my-5" />
       <CommonXfitLoader v-if="membership?.isLoading && !membership?.data" />
 
-      <div class="bg-[var(--c3)] rounded-xl mb-4 shadow-lg p-5" v-else>
+      <div class="bg-[var(--c3)] rounded-xl mb-4 shadow-lg p-5 main-card" v-else>
          <MembershipInformation :membership="membership?.data" />
-         <section
-            v-if="
-               !membership?.data?.membershipTapPayments &&
-               !membership?.data?.membershipTamaraPayments
-            "
-         >
+         <section v-if="
+            !membership?.data?.membershipTapPayments &&
+            !membership?.data?.membershipTamaraPayments
+         ">
             <hr class="my-4" />
             <h4 class="mb-4 text-center">
                {{ $t("Payment options", "طرق الدفع") }}
             </h4>
-            <div v-if="membership?.data?.package_status" >
-               <div id="CreditCard" class=" flex justify-center items-center " >
-                  <input class="w-8"  type="radio" v-model="PayMehtod" value="creditCard"  /> 
-                  <label class="flex-1 pt-3" > {{ $t("Credit cards", "البطاقة الائتمانية") }}</label>
+            <div v-if="membership?.data?.package_status">
+               <div id="CreditCard" class=" flex justify-center items-center ">
+                  <input class="w-8" type="radio" v-model="PayMehtod" value="creditCard" />
+                  <label class="flex-1 pt-3"> {{ $t("Credit cards", "البطاقة الائتمانية") }}</label>
                </div>
-               <div v-if="membership.data.installment" id="tamara"  class=" flex justify-center items-center ">
-                  <input class="w-8" type="radio" v-model="PayMehtod" value="tamara"  /> 
+               <div v-if="membership.data.installment" id="tamara" class=" flex justify-center items-center ">
+                  <input class="w-8" type="radio" v-model="PayMehtod" value="tamara" />
                   <label class="flex-1 pt-3" for="tamara"> {{ $t("Pay with Tamara", "ادفعي مع تمارا") }} </label>
                </div>
                <div v-if="membership.data.installment" id="tabby" class=" flex justify-center items-center ">
-                  <input class="w-8" type="radio" v-model="PayMehtod" value="tabby"  /> 
-                  <label class="flex-1 pt-3" for="tabby">  {{ $t("Pay with Tabby", "ادفعي مع تابي") }} </label>
+                  <input class="w-8" type="radio" v-model="PayMehtod" value="tabby" />
+                  <label class="flex-1 pt-3" for="tabby"> {{ $t("Pay with Tabby", "ادفعي مع تابي") }} </label>
                </div>
-               <div v-show="PayMehtod==='tabby'" class=" bg-white p-5 rounded-lg mx-5 my-3" id="tabbyCard"></div>
+               <div v-show="PayMehtod === 'tabby'" class=" bg-white p-5 rounded-lg mx-5 my-3" id="tabbyCard"></div>
 
                <div class="py-3">
                   <ButtonsPrimary class="w-24" @click="confimPayMethod">{{ $t("Confirm", "تأكيد") }}</ButtonsPrimary>
@@ -144,40 +144,41 @@ const currentLanguage = useCookie("lang");
 const getMembership = () => {
    membership.value = useGetMembership();
 };
-const confimPayMethod = () =>{
+const confimPayMethod = () => {
    console.log(PayMehtod);
-   if(PayMehtod.value === 'creditCard'){
+   if (PayMehtod.value === 'creditCard') {
       navigateTo("/member/buy/tap");
    }
-   if(PayMehtod.value === 'tamara'){
-      navigateTo("/member/buy/tamara");
-   }
-   if(PayMehtod.value === 'tabby'){
+   if (PayMehtod.value === 'tabby') {
       navigateTo("/member/buy/tabby");
+   }
+
+   if (PayMehtod.value === 'tamara') {
+      navigateTo("/member/buy/tamara");
    }
 }
 
-watch(()=>membership.value,()=>{
+watch(() => membership.value, () => {
    // console.log(membership.value);
-   const {data} = membership.value
-      console.log(data.price);
-      tabbyCard.tabbyCard('SAR',data?.price,currentLanguage.value)
-   
+   const { data } = membership.value
+   console.log(data.price);
+   tabbyCard.tabbyCard('SAR', data?.price, currentLanguage.value)
+
 
 });
-watch(()=>currentLanguage.value,()=>{
+watch(() => currentLanguage.value, () => {
    // console.log(membership.value);
-   const {data} = membership.value
-      console.log('change language');
-      tabbyCard.tabbyCard('SAR',data?.price,currentLanguage.value)
-   
+   const { data } = membership.value
+   console.log('change language');
+   tabbyCard.tabbyCard('SAR', data?.price, currentLanguage.value)
+
 
 });
 
-watch(()=>PayMehtod.value,()=>{
-   if(PayMehtod.value === 'tabby'){
-      const {data} = membership.value
-      tabbyCard.tabbyCard('SAR',data?.price,currentLanguage.value)
+watch(() => PayMehtod.value, () => {
+   if (PayMehtod.value === 'tabby') {
+      const { data } = membership.value
+      tabbyCard.tabbyCard('SAR', data?.price, currentLanguage.value)
    }
 })
 

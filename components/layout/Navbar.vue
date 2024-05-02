@@ -16,11 +16,11 @@
                   </span>
                </a>
                <ColorMode />
-               <div class="flex items-center gap-1 relative cursor-pointer" @click="arabicOptions = !arabicOptions">
+               <div class="flex items-center gap-1 relative cursor-pointer hovered" @click="arabicOptions = !arabicOptions">
                   <Icon class="text-3xl" name="material-symbols:person-rounded" /> <span class="hidden md:block">{{
                      username }}</span>
                   <Icon name="ion:md-arrow-dropdown" />
-                  <div v-if="arabicOptions" class="options-container w-40 text-start">
+                  <div v-if="arabicOptions" class="options-container w-40 text-start ">
                      <h1 class="font-bold mb-1 hover:bg-cyan-500 px-1 rounded w-100" @click="refreshPage">
                         <Icon class="text-xl" name="material-symbols:refresh-rounded" /> تحديث النظام
                      </h1>
@@ -44,7 +44,7 @@
                   </span>
                </a>
                <ColorMode />
-               <div class="flex items-center gap-1 relative cursor-pointer" @click="englishOptions = !englishOptions">
+               <div class="flex items-center gap-1 relative cursor-pointer hovered" @click="englishOptions = !englishOptions">
                   <Icon class="text-3xl" name="material-symbols:person-rounded" /> <span class="hidden md:block">{{
                      username }}</span>
                   <Icon name="ion:md-arrow-dropdown" />
@@ -83,11 +83,15 @@ const changeLanguage = (newLanguage) => {
 </script>
 
 <style scoped>
+.hovered:hover .options-container {
+    display: flex;
+    flex-direction: column;
+  }
 .options-container {
    position: absolute;
    top: 100%;
    left: 0;
-   display: block;
+   display: none;
    background-color: white;
    padding: 0.5rem;
    border: 1px solid #ccc;

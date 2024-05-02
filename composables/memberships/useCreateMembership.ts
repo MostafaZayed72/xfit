@@ -15,13 +15,13 @@ export const useCreateMembership = (
 ) => {
    const { $t } = useNuxtApp();
 
-   if (memberInformationIsRequired)
-      return notify("danger", [
-         $t(
-            "Please, complete the required information.",
-            "يرجي استكمال البيانات المطلوبة"
-         ),
-      ]);
+   // if (memberInformationIsRequired)
+   //    return notify("danger", [
+   //       $t(
+   //          "Please, complete the required information.",
+   //          "يرجي استكمال البيانات المطلوبة"
+   //       ),
+   //    ]);
 
    if (!newMembership.branch_id)
       return notify("danger", [

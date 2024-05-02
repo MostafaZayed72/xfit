@@ -1,5 +1,5 @@
 <template>
-   <main v-if="membership">
+   <main >
       <h3 class="display-6 text-center">
          {{ $t("Membership information") }}
       </h3>
@@ -107,7 +107,7 @@
    </main>
 </template>
 
-<script setup>
+<!-- <script setup>
 import { membershipTerms } from "@/utils/membershipTerms";
 import * as tap from "@/utils/tap";
 import { useGetMembership } from "@/composables/memberships/useGetMembership";
@@ -122,14 +122,15 @@ const tap_init = ref();
 const generated_token = ref();
 const submit_disabled = ref();
 
-onBeforeMount(() => {
-   getMembership();
-   tap_init.value = tap.init(dir.value);
-});
-
+console.log(tap_init);
 const getMembership = () => {
    membership.value = useGetMembership();
 };
+
+// onBeforeMount(() => {
+//    getMembership();
+//    tap_init.value = tap.init();
+// });
 
 const generateToken = async () => {
    if (submit_disabled) return;
@@ -182,10 +183,10 @@ watch(
       }, 1000);
    }
 );
-</script>
+</script> -->
 
-<style scoped>
+<!-- <style scoped>
 iframe {
    min-height: 170px;
 }
-</style>
+</style> -->

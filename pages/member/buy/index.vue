@@ -1,6 +1,6 @@
 <template>
    <div class=" text-center mship md:mb-16">
-      <NuxtLink class="sm:text-sm md:text-5xl" to="/">{{ $t("Home", "الرئيسية") }}</NuxtLink>
+      <NuxtLink class="text-sm md:text-5xl" to="/">{{ $t("Home", "الرئيسية") }}</NuxtLink>
       <span class="mx-2 text-sm md:text-5xl">/</span>
       <NuxtLink to="/packages" class="text-sm md:text-5xl">
          {{ $t("Membership packages", "باقات الاشتراك") }}
@@ -16,7 +16,7 @@
             !memberInformationIsRequired?.isFinished)
       " />
 
-      <div class="bg-[var(--c9)] mb-5 p-5 shadow-lg rounded-xl" v-if="
+      <!-- <div class="bg-[var(--c9)] mb-5 p-5 shadow-lg rounded-xl" v-if="
          memberInformationIsRequired?.isFinished &&
          memberInformationIsRequired?.data
       ">
@@ -41,7 +41,7 @@
                {{ $t("Go to your profile", "الذهاب إلى ملفك الشخصي") }}
             </ButtonsSecondary>
          </p>
-      </div>
+      </div> -->
 
       <div v-if="thePackage?.data" class="main-card rounded-xl shadow-lg p-5">
          <p class="mb-5">{{ thePackage.data.name }}</p>
@@ -93,7 +93,7 @@
 
          <div class="text-end ">
             <ButtonsPrimary class="w-20 bg-cyan-400 choose" :isLoading="createMembershipRequest?.isLoading"
-               :disabled="memberInformationIsRequired?.data" @click="createMembership()">
+           @click="createMembership()">
                {{ $t("Confirm", "تأكيد") }}
             </ButtonsPrimary>
          </div>
