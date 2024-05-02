@@ -87,7 +87,7 @@
             <label class="block mb-2">
                {{ $t("Membership start date", "تاريخ بداية الاشتراك") }}
             </label>
-            <input type="date" class="w-full bg-[var(--c1)] text-black" :min="thePackage.data.min_membership_start_date"
+            <input type="date" class="w-full bg-zinc-300 text-black" :min="thePackage.data.min_membership_start_date"
                :max="thePackage.data.max_membership_start_date" v-model="newMembership.membership_start_date" />
          </div>
 

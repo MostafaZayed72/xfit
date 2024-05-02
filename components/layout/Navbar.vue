@@ -24,12 +24,12 @@
                      <h1 class="font-bold mb-1 hover:bg-cyan-500 px-1 rounded w-100" @click="refreshPage">
                         <Icon class="text-xl" name="material-symbols:refresh-rounded" /> تحديث النظام
                      </h1>
-                     <nuxt-link to="member/profile" class="font-bold hover:bg-cyan-500 px-1 rounded w-100" > 
+                     <nuxt-link to="/member/profile" class="font-bold hover:bg-cyan-500 px-1 rounded w-100" > 
                         <Icon class="text-xl" name="material-symbols:account-box" /> ملفي الشخصي
                      </nuxt-link>
                      
                      <hr class="my-3" />
-                     <nuxt-link to="member/profile" class="font-bold hover:bg-cyan-500 px-1 rounded w-100" > 
+                     <nuxt-link  @click="logout" class="font-bold hover:bg-cyan-500 px-1 rounded w-100" > 
                         <Icon class="text-xl" name="ic:sharp-log-out" /> تسجيل الخروج
                      </nuxt-link>
                   </div>
@@ -52,12 +52,12 @@
                      <h1 class="font-bold mb-1 hover:bg-cyan-500 px-1 rounded w-100" @click="refreshPage">
                         <Icon class="text-xl" name="material-symbols:refresh-rounded" /> Refresh Page
                      </h1>
-                     <nuxt-link to="member/profile" class="font-bold hover:bg-cyan-500 px-1 rounded w-100" > 
+                     <nuxt-link to="/member/profile" class="font-bold hover:bg-cyan-500 px-1 rounded w-100" > 
                        <Icon class="text-xl" name="material-symbols:account-box" />  My Profile
                      </nuxt-link>
                      
                      <hr class="my-3" />
-                     <nuxt-link to="member/profile" class="font-bold hover:bg-cyan-500 px-1 rounded w-100" > 
+                     <nuxt-link @click="logout" class="font-bold hover:bg-cyan-500 px-1 rounded w-100" > 
                        <Icon class="text-xl" name="ic:sharp-log-out" />  Log Out
                      </nuxt-link>
                   </div>
@@ -70,6 +70,7 @@
 </template>
 
 <script setup>
+import { logout } from '~/composables/user/useUser';
 const arabicOptions = ref('false')
 const englishOptions = ref('false')
 const refreshPage = () => {

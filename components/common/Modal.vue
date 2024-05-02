@@ -1,6 +1,6 @@
 <template>
    <div class="modal" :id="modalID">
-      <div class="modal-dialog">
+      <div class="modal-dialog main-card">
          <h4 class="my-5 text-center text-xl">{{ title }}</h4>
          <hr>
          <div class="modal-body">

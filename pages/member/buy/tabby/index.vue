@@ -95,7 +95,7 @@
                      </p>
 
                      <div class="text-end ">
-                        <ButtonsPrimary class="w-24 bg-cyan-500" @click="startTabbyPayment(payment_type.web_url)">
+                        <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="startTabbyPayment(payment_type.web_url)">
                            {{ $t("Confirm", "تأكيد") }}
                         </ButtonsPrimary>
                      </div>

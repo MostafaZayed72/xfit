@@ -40,7 +40,7 @@
                <div v-show="PayMehtod === 'tabby'" class=" bg-white p-5 rounded-lg mx-5 my-3" id="tabbyCard"></div>
 
                <div class="py-3">
-                  <ButtonsPrimary class="w-24" @click="confimPayMethod">{{ $t("Confirm", "تأكيد") }}</ButtonsPrimary>
+                  <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="confimPayMethod">{{ $t("Confirm", "تأكيد") }}</ButtonsPrimary>
                </div>
 
             </div>

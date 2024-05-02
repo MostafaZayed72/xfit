@@ -79,7 +79,7 @@
 
                      <div class="text-end">
                         <ButtonsPrimary
-                           class="w-24"
+                           class="w-24 bg-cyan-500 choose"
                            @click="startTamaraPayment(payment_type.name)"
                         >
                            {{ $t("Confirm", "تأكيد") }}

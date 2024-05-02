@@ -22,7 +22,7 @@
                </div>
             </form>
             <div>
-               <button type="submit" class="btn btn-primary" form="auth">
+               <button type="submit" class="w-24 bg-cyan-500 choose" form="auth">
                   {{ $t('Confirm') }}
                </button>
                <nuxt-link class="btn btn-secondary" to="/auth/login">
