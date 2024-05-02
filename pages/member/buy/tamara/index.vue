@@ -13,7 +13,7 @@
          </p>
       </div>
       <hr class="my-5" />
-
+      hello {{ tamara_payment_types.length }}
       <CommonXfitLoader v-if="membership?.isLoading && !membership?.data" />
 
       <div class="bg-[var(--c3)] rounded-xl mb-4 shadow-lg p-5 main-card" v-else>
@@ -27,86 +27,50 @@
 
          <section>
             <hr class="my-4" />
-            <h4 class="mb-5">
+            <h4 class="mb-10">
                {{ $t("Tamara payment options", "خيارات دفع تمارا") }}
             </h4>
             <CommonXfitLoader v-if="
                tamara_payment_types?.isLoading || !tamara_payment_types?.data
             " />
-            <div class="mb-5" v-else>
-               <div class=" rounded-xl" v-for="payment_type in tamara_payment_types?.data"
-                  :key="payment_type.name">
-                  <div class="h-100 shadow-sm bg-light rounded-3 d-block p-4 text-center" style="margin-top: 0.5cm;">
-                     <!-- <h4 class="mb-3 package-name">
-              <span v-if="lang == 'ar'">
-                {{ payment_type.description_ar }}
-              </span>
-              <span v-if="lang == 'en'">
-                {{ payment_type.description }}
-              </span>
-            </h4> -->
-                     <p class="mb-3 lh-lg package-name">
-                     <div v-if="payment_type.name === 'PAY_BY_INSTALMENTS'"> <span class="me-2">{{
-                        $t("Divide it into", "قسمها على")
-                     }}</span>
-                        <span if class="me-1">
-                           {{
-
-                              (payment_type.supported_instalments.length) + 1
-                           }}
-                        </span>
-                        <span class="me-1">
-                           {{ $t("monthly payments of", "دفعات شهرية بقيمة") }}
-                        </span>
-                        <span class="me-1">
-                           {{
-                              Number(
-                                 membership.data.price /
-                                 ((payment_type.supported_instalments.length) + 1)
-
-                              ).toLocaleString(undefined, {
-                                 maximumFractionDigits: 4,
-                              })
-                           }}
-                        </span>
-                        <span class="me-1 inline-block">{{ $t("SAR", "ريال") }}
-                        </span>
-                        <span> {{ $t("without fees", "بدون رسوم") }}</span>
-                     </div>
-                     <div v-else-if="payment_type.name === 'PAY_NOW'"> <span class="me-2">{{
-                        $t("Pay now", " ادفعها كاملة بقيمة")
-                     }}</span>
-                        <span if class="me-1">
-                           {{
-                              membership.data.price
-
-                           }}
-                        </span>
-                        <span class="me-1">
-
-                        </span>
-                        <span class="me-1">
-
-                        </span>
-                        <span class="me-1 inline-block">{{ $t("SAR", "ريال") }}
-                        </span>
-                        <span> {{ $t("without fees", "بدون رسوم") }}</span>
-                     </div>
-                     </p>
-
-                     <div class="text-end ">
-                        <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="startTamaraPayment(payment_type.name)">
-                           {{ $t("Confirm", "تأكيد") }}
-                        </ButtonsPrimary>
-                     </div>
-
+            <div class="mb-5 " v-else>
+               <div class="rounded-xl" v-for="payment_type in tamara_payment_types?.data" :key="payment_type.name">
+                  <div class="h-100 shadow-sm bg-light rounded-3  py-4 text-center" style="margin-top: 0.5cm;">
+                     <label class=" flex items-center ">
+                        <input type="radio" :value="payment_type.name" v-model="selectedPaymentType" class="w-[20px]">
+                        <p class=" lh-lg package-name ">
+                           <span v-if="payment_type.name === 'PAY_BY_INSTALMENTS'">
+                              <span class="me-2 ">{{ $t("Divide it into", "قسمها على") }}</span>
+                              <span class="me-1">{{ (payment_type.supported_instalments.length) + 1 }}</span>
+                              <span class="me-1">{{ $t("monthly payments of", "دفعات شهرية بقيمة") }}</span>
+                              <span class="me-1">{{ Number(membership.data.price /
+                                 ((payment_type.supported_instalments.length) + 1)).toLocaleString(undefined, {
+                                 maximumFractionDigits: 4 }) }}</span>
+                              <span class="me-1 inline-block">{{ $t("SAR", "ريال") }}</span>
+                              <span>{{ $t("without fees", "بدون رسوم") }}</span>
+                           </span>
+                           <span v-else-if="payment_type.name === 'PAY_NOW'">
+                              <span class="me-2">{{ $t("Pay now", " ادفعها كاملة بقيمة") }}</span>
+                              <span class="me-1">{{ membership.data.price }}</span>
+                              <span class="me-1"></span>
+                              <span class="me-1"></span>
+                              <span class="me-1 inline-block">{{ $t("SAR", "ريال") }}</span>
+                              <span>{{ $t("without fees", "بدون رسوم") }}</span>
+                           </span>
+                        </p>
+                     </label>
                   </div>
-
-
-
+                  <div class="text-center mt-4" v-if="payment_type.name === 'PAY_NOW'">
+                     <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="startTamaraPayment(payment_type.name)">
+                        {{ $t("Confirm", "تأكيد") }}
+                     </ButtonsPrimary>
+                  </div>
                </div>
+               <!-- Confirm Button outside the v-for loop -->
 
             </div>
+
+
 
             <div>
                <p class="text-center text-cyan-500">
@@ -154,6 +118,7 @@ import { useGetTamaraPaymentTypes } from "@/composables/tamara/useGetTamaraPayme
 import { useStartTamaraPayment } from "@/composables/tamara/useStartTamaraPayment";
 import { notify } from "@/composables/common/useNotifications";
 
+const selectedPaymentType = ref()
 const membership = ref();
 const tamara_payment_types = ref([]);
 

@@ -33,6 +33,10 @@
                   <input class="w-8" type="radio" v-model="PayMehtod" value="tamara" />
                   <label class="flex-1 pt-3" for="tamara"> {{ $t("Pay with Tamara", "ادفعي مع تمارا") }} </label>
                </div>
+               <div v-if="membership.data.installment" id="apple" class=" flex justify-center items-center ">
+                  <input class="w-8" type="radio" v-model="PayMehtod" value="apple" />
+                  <label class="flex-1 pt-3" for="tamara"> {{ $t("Pay with Apple", "ادفعي مع آبل") }} </label>
+               </div>
                <div v-if="membership.data.installment" id="tabby" class=" flex justify-center items-center ">
                   <input class="w-8" type="radio" v-model="PayMehtod" value="tabby" />
                   <label class="flex-1 pt-3" for="tabby"> {{ $t("Pay with Tabby", "ادفعي مع تابي") }} </label>
@@ -155,6 +159,10 @@ const confimPayMethod = () => {
 
    if (PayMehtod.value === 'tamara') {
       navigateTo("/member/buy/tamara");
+   }
+
+   if (PayMehtod.value === 'apple') {
+      navigateTo("/member/buy/apple");
    }
 }
 
