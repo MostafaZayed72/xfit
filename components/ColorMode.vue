@@ -37,12 +37,12 @@
  }
  .dark-mode .main-card{
    background-color: #0c304d;
-   color: #ebf4f1;
+   color: white;
  }
  
  .dark-mode .item-bx{
    background-color: #091a28;
-   color: #ebf4f1;
+   color: white;
  }
  .dark-mode .options-container{
    color: black;
