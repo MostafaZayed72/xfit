@@ -26,6 +26,7 @@
          </section>
 
          <section>
+           
             <hr class="my-4" />
             <h4 class="mb-5">
                {{ $t("payment", "الدفع") }}

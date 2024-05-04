@@ -20,6 +20,19 @@
             !membership?.data?.membershipTapPayments &&
             !membership?.data?.membershipTamaraPayments
          ">
+            <!--START PROMO CODE -->
+            <div class="flex flex-col md:flex-row items-center gap-4 mb-4">
+               <h1>Promo Code</h1><input type="text" v-model="promo" placeholder="If You Have Promo Code"
+                  class="rounded w-[100%] md:w-[45%]" style="border: 1px solid;">
+               <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="sendDataToBackend()">
+                  {{ $t("Confirm", "تأكيد") }}
+               </ButtonsPrimary>
+               <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="removePromoCode()">
+                  {{ $t("Remove Promo Code", "حذف البروموكود") }}
+               </ButtonsPrimary>
+            </div>
+            <h1 v-if="promo">{{ $t('Price after adding promo code : ', 'السعر بعج إضافة البرمو كود') }}</h1>
+            <!--END PROMO CODE -->
             <hr class="my-4" />
             <h4 class="mb-4 text-center">
                {{ $t("Payment options", "طرق الدفع") }}
@@ -44,7 +57,8 @@
                <div v-show="PayMehtod === 'tabby'" class=" bg-white p-5 rounded-lg mx-5 my-3" id="tabbyCard"></div>
 
                <div class="py-3">
-                  <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="confimPayMethod">{{ $t("Confirm", "تأكيد") }}</ButtonsPrimary>
+                  <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="confimPayMethod">{{ $t("Confirm", "تأكيد") }}
+                  </ButtonsPrimary>
                </div>
 
             </div>
@@ -134,6 +148,40 @@
 <script setup>
 import { useGetMembership } from "@/composables/memberships/useGetMembership";
 import * as tabbyCard from "@/utils/tabbyCard";
+import axios from 'axios';
+
+const promo = ref('')
+
+async function sendDataToBackend() {
+   try {
+      const data = {
+         membership_id: membership.value.data.id,
+         promo_code: promo.value,
+      };
+
+      const response = await axios.post('/gym/promo-codes/validate-promo-code', data);
+      console.log('Response from backend:', response.data);
+   } catch (error) {
+      console.error('Error sending data to backend:', error);
+   }
+}
+async function removePromoCode() {
+   try {
+      const data = {
+         membership_id: membership.value.data.id,
+         promo_code: promo.value,
+         remove: true
+      };
+
+      const response = await axios.post('/gym/promo-codes/validate-promo-code', data);
+      console.log('Response from backend:', response.data);
+   } catch (error) {
+      console.error('Error sending data to backend:', error);
+   }
+
+   promo.value=('')
+}
+
 
 onBeforeMount(() => {
    getMembership()
@@ -191,3 +239,9 @@ watch(() => PayMehtod.value, () => {
 })
 
 </script>
+
+<style scoped>
+input:focus::placeholder {
+   opacity: 0;
+}
+</style>
