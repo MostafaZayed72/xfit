@@ -45,7 +45,8 @@
                               <span class="me-1">{{ $t("monthly payments of", "دفعات شهرية بقيمة") }}</span>
                               <span class="me-1">{{ Number(membership.data.price /
                                  ((payment_type.supported_instalments.length) + 1)).toLocaleString(undefined, {
-                                 maximumFractionDigits: 4 }) }}</span>
+                                    maximumFractionDigits: 4
+                                 }) }}</span>
                               <span class="me-1 inline-block">{{ $t("SAR", "ريال") }}</span>
                               <span>{{ $t("without fees", "بدون رسوم") }}</span>
                            </span>
@@ -137,8 +138,13 @@ const getTamaraPaymentTypes = () => {
 };
 
 const startTamaraPaymentRequest = ref();
-const startTamaraPayment = (payment_type) => {
-   startTamaraPaymentRequest.value = useStartTamaraPayment(payment_type);
+const startTamaraPayment = async (payment_type) => {
+   try {
+      startTamaraPaymentRequest.value = await useStartTamaraPayment(payment_type);
+   } catch (error) {
+      console.log(error);
+      notify("danger", error?.[0])
+   }
 };
 
 watch(
@@ -154,7 +160,7 @@ watch(
    () => {
       if (
          startTamaraPaymentRequest.value.isFinished &&
-         !startTamaraPaymentRequest.value.error
+         !startTamaraPaymentRequest.value.errors
       ) {
          notify("success", ["You will be redirect to Tamara"]);
          setTimeout(function () {
@@ -162,6 +168,9 @@ watch(
                startTamaraPaymentRequest.value.data.checkout_url
             );
          }, 1000);
+      }
+      else {
+         notify("error", [membership.data.errors])
       }
    }
 );

@@ -61,7 +61,8 @@
                      </label>
                   </div>
                   <div class="text-center mt-4" v-if="payment_type.name === 'PAY_NOW'">
-                     <ButtonsPrimary class="w-24 bg-cyan-500 choose" >
+                     <ButtonsPrimary class="w-24 bg-cyan-500 choose"
+                     @click="startTabbyPayment(payment_type.web_url)">
                         {{ $t("Confirm", "تأكيد") }}
                      </ButtonsPrimary>
                   </div>
@@ -109,61 +110,106 @@
 </template>
 
 <script setup>
+
+import * as tabbyPromo from "@/utils/tabbySnippet";
+import * as tabbyCard from "@/utils/tabbyCard";
+
 import { membershipTerms } from "@/utils/membershipTerms";
-// import { lang } from "@/composables/user/useUser";
 import { useGetMembership } from "@/composables/memberships/useGetMembership";
-import { useGetTamaraPaymentTypes } from "@/composables/tamara/useGetTamaraPaymentTypes";
-import { useStartTamaraPayment } from "@/composables/tamara/useStartTamaraPayment";
+import { useStartTabbySession } from "@/composables/tabby/useStartTabbySession";
 import { notify } from "@/composables/common/useNotifications";
 
-const selectedPaymentType = ref()
-
+const { $t } = useNuxtApp();
 const membership = ref();
-const tamara_payment_types = ref([]);
+const tabbyStatus = ref();
+const rejected = ref(false);
+const rejectedMsg = $t("Sorry, Tabby is unable to approve this purchase. Please use an alternative payment method for your order.", "نأسف، تابي غير قادرة على الموافقة على هذه العملية. الرجاء استخدام طريقة دفع أخرى.");
 
 onBeforeMount(() => {
    getMembership();
+   startTabbySession();
+   //console.log(membership.value);
+   //console.log();
 });
+
+
+
 
 const getMembership = () => {
    membership.value = useGetMembership();
+   
 };
 
-const getTamaraPaymentTypes = () => {
-   tamara_payment_types.value = useGetTamaraPaymentTypes(
-      membership.value?.data.price
-   );
+const tabbyPaymentOptions = ref();
+const startTabbySession = () => {
+   tabbyPaymentOptions.value = useStartTabbySession();
+   
 };
 
-const startTamaraPaymentRequest = ref();
-const startTamaraPayment = (payment_type) => {
-   startTamaraPaymentRequest.value = useStartTamaraPayment(payment_type);
+const startTabbyPayment = (tabbyURL) => {
+   // notify(
+   //    "success",
+   //    $t(
+   //       "Page will be redirected to Tabby platform now.",
+   //       "سيتم إعادة توجيه الصفحة الآن إلى منصة تابي"
+   //    ),
+   //    2
+   // );
+   setTimeout(() => {
+      window.location.href = tabbyURL;
+   }, 1000);
 };
 
 watch(
-   () => membership.value?.isFinished,
+   () => tabbyPaymentOptions.value?.isFinished,
    () => {
-      if (membership.value.isFinished && !membership.value.error)
-         getTamaraPaymentTypes();
-   }
-);
-
-watch(
-   () => startTamaraPaymentRequest.value?.isFinished,
-   () => {
-      if (
-         startTamaraPaymentRequest.value.isFinished &&
-         !startTamaraPaymentRequest.value.error
-      ) {
-         notify("success", ["You will be redirect to Tamara"]);
-         setTimeout(function () {
-            window.location.replace(
-               startTamaraPaymentRequest.value.data.checkout_url
-            );
-         }, 1000);
+      tabbyStatus.value = tabbyPaymentOptions.value?.data?.status
+      const price = membership.value?.data?.price
+      const lang = $t("en", "ar") 
+     // if(tabbyStatus.value === 'created' && price){
+         tabbyCard.tabbyCard('SAR',price,lang)
+         tabbyPromo.tabbysnippet('SAR',price,lang)
+      //}
+      if(tabbyStatus.value === 'rejected' && price){
+         rejected.value = true;
       }
+      
    }
-);
+)
+
+// watch(
+//    () => membership.value?.isFinished,
+//    () => {
+//       if (membership.value.isFinished && !membership.value.error)
+//       console.log(membership.value.data)
+      
+//    }
+// );
+
+// watch(
+//    () => membership.value?.isFinished,
+//    () => {
+//       if (membership.value.isFinished && !membership.value.error)
+//          getTamaraPaymentTypes();
+//    }
+// );
+
+// watch(
+//    () => startTamaraPaymentRequest.value?.isFinished,
+//    () => {
+//       if (
+//          startTamaraPaymentRequest.value.isFinished &&
+//          !startTamaraPaymentRequest.value.error
+//       ) {
+//          notify("success", ["You will be redirect to Tamara"]);
+//          setTimeout(function () {
+//             window.location.replace(
+//                startTamaraPaymentRequest.value.data.checkout_url
+//             );
+//          }, 1000);
+//       }
+//    }
+// );
 </script>
 
 <style scoped>
