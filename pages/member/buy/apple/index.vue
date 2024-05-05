@@ -1,5 +1,4 @@
 <template>
-
    <main>
       <div class="text-center mship md:mb-16">
          <p class="">
@@ -13,18 +12,14 @@
          </p>
       </div>
       <hr class="my-5" />
-
       <CommonXfitLoader v-if="membership?.isLoading && !membership?.data" />
-
       <div class="bg-[var(--c3)] rounded-xl mb-4 shadow-lg p-5 main-card" v-else>
          <MembershipInformation :membership="membership?.data" />
-
          <section class="text-end mt-3">
             <nuxt-link class="underline" to="/member/memberships/view">
                {{ $t("Change payment method", "تغيير طريقة الدفع") }}
             </nuxt-link>
          </section>
-
          <section>
            
             <hr class="my-4" />
@@ -34,10 +29,7 @@
             <CommonXfitLoader v-if="
                tamara_payment_types?.isLoading || !tamara_payment_types?.data
             " />
-
-
             <div class="flex flex-col-reverse md:flex-row justify-center gap-4 items-center">
-
                <p class="text-center text-cyan-500">
                   <span class="text-sm inline-block me-1">
                      {{
@@ -59,15 +51,13 @@
                <div class="flex justify-center gap-4 items-center">
                   <h1>{{ $t('Package price:', 'سعر الباقة:') }} {{ membership.data.price }} {{ $t('SAR', 'ريال') }}
                   </h1>
-
-                  <ButtonsPrimary class="w-24 bg-cyan-500 choose">
+                  <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="apple">
                      {{ $t("Confirm", "تأكيد") }}
                   </ButtonsPrimary>
                </div>
             </div>
          </section>
       </div>
-
       <!-- Terms and conditions modal -->
       <CommonModal :title="$t('Terms and conditions', 'الاحكام والشروط')" modalID="terms-and-conditions-modal">
          <div>
@@ -82,7 +72,6 @@
       </CommonModal>
    </main>
 </template>
-
 <script setup>
 import { membershipTerms } from "@/utils/membershipTerms";
 // import { lang } from "@/composables/user/useUser";
@@ -90,31 +79,24 @@ import { useGetMembership } from "@/composables/memberships/useGetMembership";
 import { useGetTamaraPaymentTypes } from "@/composables/tamara/useGetTamaraPaymentTypes";
 import { useStartTamaraPayment } from "@/composables/tamara/useStartTamaraPayment";
 import { notify } from "@/composables/common/useNotifications";
-
 const selectedPaymentType = ref()
-
 const membership = ref();
 const tamara_payment_types = ref([]);
-
 onBeforeMount(() => {
    getMembership();
 });
-
 const getMembership = () => {
    membership.value = useGetMembership();
 };
-
 const getTamaraPaymentTypes = () => {
    tamara_payment_types.value = useGetTamaraPaymentTypes(
       membership.value?.data.price
    );
 };
-
 const startTamaraPaymentRequest = ref();
 const startTamaraPayment = (payment_type) => {
    startTamaraPaymentRequest.value = useStartTamaraPayment(payment_type);
 };
-
 watch(
    () => membership.value?.isFinished,
    () => {
@@ -122,7 +104,6 @@ watch(
          getTamaraPaymentTypes();
    }
 );
-
 watch(
    () => startTamaraPaymentRequest.value?.isFinished,
    () => {
@@ -139,8 +120,11 @@ watch(
       }
    }
 );
-</script>
 
+const apple= ()=>{
+   navigateTo('https://checkout.beta.tap.company/?mode=page&themeMode=&language=en&token=eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY2MzdkZjMxN2RjM2Q5MDgxNDg4YTZkNiJ9.T9xnbQR86Nnb4-iwS3XN4hkaDUcCx0hND_PrHMM6IjE', { external: true })
+}
+</script>
 <style scoped>
 iframe {
    min-height: 170px;
