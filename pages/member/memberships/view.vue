@@ -24,10 +24,10 @@
             <div class="flex flex-col md:flex-row items-center gap-4 mb-4">
                <h1>Promo Code</h1><input type="text" v-model="promo" placeholder="If You Have Promo Code"
                   class="rounded w-[100%] md:w-[45%]" style="border: 1px solid;">
-               <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="applyPromoCode()">
+               <ButtonsPrimary v-if="!confirmed" class="w-24 bg-cyan-500 choose" @click="applyPromoCode()">
                   {{ $t("Confirm", "تأكيد") }}
                </ButtonsPrimary>
-               <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="removePromoCode()">
+               <ButtonsPrimary v-else class="w-24 bg-cyan-500 choose" @click="removePromoCode()">
                   {{ $t("Remove Promo Code", "حذف البروموكود") }}
                </ButtonsPrimary>
             </div>
@@ -153,7 +153,7 @@ import { notify } from "~/composables/common/useNotifications";
 
 const promo = ref('')
 const PayMehtod = ref('creditCard');
-
+const confirmed = ref('');
 const membership = ref();
 const getMembership = () => {
    membership.value = useGetMembership();
@@ -177,9 +177,9 @@ async function applyPromoCode() {
             data
          }
       );
-      notify('success',['Promo code applied']);
-      if (!response?.data?.value)
-      {
+      notify('success', ['Promo code applied']);
+      confirmed.value = true;
+      if (!response?.data?.value) {
          throw new Error('Cant apply the promo code.')
       }
       console.log(response.data.value)
@@ -199,6 +199,7 @@ async function removePromoCode() {
 
       const response = await axios.post('/gym/promo-codes/validate-promo-code', data);
       console.log('Response from backend:', response.data);
+      confirmed.value = false;
    } catch (error) {
       console.error('Error sending data to backend:', error);
    }

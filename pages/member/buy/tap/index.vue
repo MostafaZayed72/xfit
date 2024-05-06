@@ -81,8 +81,8 @@
  </template>
  
  <script>
- import { membershipTerms } from '~/plugins/membershipTerms'
- import * as tap from '~/plugins/tap'
+ import { membershipTerms } from '~/assets/data/membershipTerms'
+ import * as tap from '~/utils/tap'
  export default {
    computed: {
      dir() {
