@@ -42,15 +42,15 @@
                   <input class="w-8" type="radio" v-model="PayMehtod" value="creditCard" />
                   <label class="flex-1 pt-3"> {{ $t("Credit cards", "البطاقة الائتمانية") }}</label>
                </div>
-               <div v-if="membership.data.installment" id="tamara" class=" flex justify-center items-center ">
+               <div  id="tamara" class=" flex justify-center items-center ">
                   <input class="w-8" type="radio" v-model="PayMehtod" value="tamara" />
                   <label class="flex-1 pt-3" for="tamara"> {{ $t("Pay with Tamara", "ادفعي مع تمارا") }} </label>
                </div>
-               <div v-if="membership.data.installment" id="apple" class=" flex justify-center items-center ">
+               <div  id="apple" class=" flex justify-center items-center ">
                   <input class="w-8" type="radio" v-model="PayMehtod" value="apple" />
                   <label class="flex-1 pt-3" for="tamara"> {{ $t("Pay with Apple", "ادفعي مع آبل") }} </label>
                </div>
-               <div v-if="membership.data.installment" id="tabby" class=" flex justify-center items-center ">
+               <div  id="tabby" class=" flex justify-center items-center ">
                   <input class="w-8" type="radio" v-model="PayMehtod" value="tabby" />
                   <label class="flex-1 pt-3" for="tabby"> {{ $t("Pay with Tabby", "ادفعي مع تابي") }} </label>
                </div>
@@ -217,7 +217,6 @@ const confimPayMethod = () => {
 watch(() => membership.value, () => {
    // console.log(membership.value);
    const { data } = membership.value
-   console.log(data.price);
    tabbyCard.tabbyCard('SAR', data?.price, currentLanguage.value)
 
 

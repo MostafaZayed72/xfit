@@ -1,5 +1,5 @@
 <template>
-   <main>
+   <main v-if="membership">
       <div class="text-center mship md:mb-16">
          <p class="">
             <NuxtLink class="text-sm md:text-5xl" to="/">{{ $t("Home", "الرئيسية") }}</NuxtLink>
@@ -21,7 +21,7 @@
             </nuxt-link>
          </section>
          <section>
-           
+
             <hr class="my-4" />
             <h4 class="mb-5">
                {{ $t("payment", "الدفع") }}
@@ -49,9 +49,9 @@
                   </a>
                </p>
                <div class="flex justify-center gap-4 items-center">
-                  <h1>{{ $t('Package price:', 'سعر الباقة:') }} {{ membership.data.price }} {{ $t('SAR', 'ريال') }}
+                  <h1>{{ $t('Package price:', 'سعر الباقة:') }} {{ membership.data?.price }} {{ $t('SAR', 'ريال') }}
                   </h1>
-                  <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="apple">
+                  <ButtonsPrimary :isLoading="loading" class="w-24 bg-cyan-500 choose" @click="charge">
                      {{ $t("Confirm", "تأكيد") }}
                   </ButtonsPrimary>
                </div>
@@ -72,58 +72,71 @@
       </CommonModal>
    </main>
 </template>
-<script setup>
-import { membershipTerms } from "@/utils/membershipTerms";
-// import { lang } from "@/composables/user/useUser";
+<script setup lang="ts">
 import { useGetMembership } from "@/composables/memberships/useGetMembership";
-import { useGetTamaraPaymentTypes } from "@/composables/tamara/useGetTamaraPaymentTypes";
-import { useStartTamaraPayment } from "@/composables/tamara/useStartTamaraPayment";
+import { membershipTerms } from '~/assets/data/membershipTerms';
+import {useTap} from "~/composables/tap/useTap";
+import {useMembershipTapChargeApplePay} from "~/composables/tap/useMembershipTapChargeApplePay"
 import { notify } from "@/composables/common/useNotifications";
-const selectedPaymentType = ref()
+
+// get the membership data from the api first
 const membership = ref();
-const tamara_payment_types = ref([]);
-onBeforeMount(() => {
-   getMembership();
-});
 const getMembership = () => {
    membership.value = useGetMembership();
-};
-const getTamaraPaymentTypes = () => {
-   tamara_payment_types.value = useGetTamaraPaymentTypes(
-      membership.value?.data.price
-   );
-};
-const startTamaraPaymentRequest = ref();
-const startTamaraPayment = (payment_type) => {
-   startTamaraPaymentRequest.value = useStartTamaraPayment(payment_type);
-};
-watch(
-   () => membership.value?.isFinished,
-   () => {
-      if (membership.value.isFinished && !membership.value.error)
-         getTamaraPaymentTypes();
+   if (!membership.value) {
+      navigateTo('/member/memberships');
    }
-);
-watch(
-   () => startTamaraPaymentRequest.value?.isFinished,
-   () => {
-      if (
-         startTamaraPaymentRequest.value.isFinished &&
-         !startTamaraPaymentRequest.value.error
-      ) {
-         notify("success", ["You will be redirect to Tamara"]);
-         setTimeout(function () {
-            window.location.replace(
-               startTamaraPaymentRequest.value.data.checkout_url
-            );
-         }, 1000);
-      }
-   }
-);
+};
+getMembership();
+const terms = computed(() => membershipTerms);
 
-const apple= ()=>{
-   navigateTo('https://checkout.beta.tap.company/?mode=page&themeMode=&language=en&token=eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY2MzdkZjMxN2RjM2Q5MDgxNDg4YTZkNiJ9.T9xnbQR86Nnb4-iwS3XN4hkaDUcCx0hND_PrHMM6IjE', { external: true })
+const submitDisabled = ref(false);
+
+// tap payment
+const {init,createToken} = useTap();
+const tabInit = ref();
+const generatedToken = ref();
+
+onMounted(() => {
+   tabInit.value = init();
+})
+
+async function generateToken() {
+   if (submitDisabled.value) return
+   generatedToken.value = await createToken(
+      tabInit.tab,
+      tabInit.card
+   );
+   submitDisabled.value = true;
 }
+
+const loading = ref();
+async function charge () {
+   try {
+   loading.value = true;
+   const res =  await useMembershipTapChargeApplePay(
+     {
+      membership_id: membership.value.data.id,
+      token_id:'src_apple_pay',
+     }
+   )
+   const url = res.data?.value?.url;
+   if (!url)
+   {
+      throw res.error;
+   }
+   location.replace(url);
+   } catch (err) {
+   console.log(err);
+   notify('danger',['Unable to pay with apple pay. Please try again later.']);
+   } finally {
+   loading.value = false;
+   }
+}
+
+// const apple= ()=>{
+//    navigateTo('https://checkout.beta.tap.company/?mode=page&themeMode=&language=en&token=eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY2MzdkZjMxN2RjM2Q5MDgxNDg4YTZkNiJ9.T9xnbQR86Nnb4-iwS3XN4hkaDUcCx0hND_PrHMM6IjE', { external: true })
+// }
 </script>
 <style scoped>
 iframe {

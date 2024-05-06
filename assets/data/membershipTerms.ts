@@ -1,5 +1,5 @@
 export const membershipTerms = [
-   'Legal age to join the center is 16 years and above under 50 years.',
+    'Legal age to join the center is 16 years and above under 50 years.',
    'You must respect and observe the customs and traditions of the Kingdom of Saudi Arabia.',
    'Smoking is strictly forbidden inside the center, as well as prevent foods and beverages.',
    'Exercise prevents practicing without sports dress in full and full body swim wear and without wearing a suitable athletic shoe.',
@@ -21,5 +21,4 @@ export const membershipTerms = [
    "On the common commitment of all the company's written instructions to this application as well as the instructions on the internal boards center and administrative circulars issued may advance the company.",
    'Taking photos is prohibited strictly, the management has the right to unsubscribe the subscriber without reply financially.',
    'You must comply with the start date recorded on the invoice.',
- ];
- 
+]
