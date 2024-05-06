@@ -24,7 +24,7 @@
             <div class="flex flex-col md:flex-row items-center gap-4 mb-4">
                <h1>Promo Code</h1><input type="text" v-model="promo" placeholder="If You Have Promo Code"
                   class="rounded w-[100%] md:w-[45%]" style="border: 1px solid;">
-               <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="sendDataToBackend()">
+               <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="applyPromoCode()">
                   {{ $t("Confirm", "تأكيد") }}
                </ButtonsPrimary>
                <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="removePromoCode()">
@@ -42,15 +42,15 @@
                   <input class="w-8" type="radio" v-model="PayMehtod" value="creditCard" />
                   <label class="flex-1 pt-3"> {{ $t("Credit cards", "البطاقة الائتمانية") }}</label>
                </div>
-               <div  id="tamara" class=" flex justify-center items-center ">
+               <div id="tamara" class=" flex justify-center items-center ">
                   <input class="w-8" type="radio" v-model="PayMehtod" value="tamara" />
                   <label class="flex-1 pt-3" for="tamara"> {{ $t("Pay with Tamara", "ادفعي مع تمارا") }} </label>
                </div>
-               <div  id="apple" class=" flex justify-center items-center ">
+               <div id="apple" class=" flex justify-center items-center ">
                   <input class="w-8" type="radio" v-model="PayMehtod" value="apple" />
                   <label class="flex-1 pt-3" for="tamara"> {{ $t("Pay with Apple", "ادفعي مع آبل") }} </label>
                </div>
-               <div  id="tabby" class=" flex justify-center items-center ">
+               <div id="tabby" class=" flex justify-center items-center ">
                   <input class="w-8" type="radio" v-model="PayMehtod" value="tabby" />
                   <label class="flex-1 pt-3" for="tabby"> {{ $t("Pay with Tabby", "ادفعي مع تابي") }} </label>
                </div>
@@ -148,21 +148,45 @@
 <script setup>
 import { useGetMembership } from "@/composables/memberships/useGetMembership";
 import * as tabbyCard from "@/utils/tabbyCard";
-import axios from 'axios';
+import { useCustomAxios } from "~/composables/common/useCustomAxios";
+import { notify } from "~/composables/common/useNotifications";
 
 const promo = ref('')
+const PayMehtod = ref('creditCard');
 
-async function sendDataToBackend() {
+const membership = ref();
+const getMembership = () => {
+   membership.value = useGetMembership();
+   console.log(membership.value);
+};
+onBeforeMount(() => {
+   getMembership()
+});
+async function applyPromoCode() {
    try {
+      if (!membership.value?.data || !promo.value) {
+         return notify('danger', ['Please provide all required data']);
+      }
       const data = {
-         membership_id: membership.value.data.id,
+         membership_id: membership.value?.data.id,
          promo_code: promo.value,
       };
-
-      const response = await axios.post('/gym/promo-codes/validate-promo-code', data);
-      console.log('Response from backend:', response.data);
+      const response = await useCustomAxios('/memberships/add-promo-code-to-membership',
+         {
+            method: "POST",
+            data
+         }
+      );
+      notify('success',['Promo code applied']);
+      if (!response?.data?.value)
+      {
+         throw new Error('Cant apply the promo code.')
+      }
+      console.log(response.data.value)
+      membership.value = response;
    } catch (error) {
-      console.error('Error sending data to backend:', error);
+      console.error('Error sending data to backend:', error.message);
+      notify('danger', ['Cant apply promo code.'])
    }
 }
 async function removePromoCode() {
@@ -179,23 +203,14 @@ async function removePromoCode() {
       console.error('Error sending data to backend:', error);
    }
 
-   promo.value=('')
+   promo.value = ('')
 }
 
 
-onBeforeMount(() => {
-   getMembership()
-
-
-});
-const PayMehtod = ref('creditCard')
-const membership = ref();
 const currentLanguage = useCookie("lang");
 
 
-const getMembership = () => {
-   membership.value = useGetMembership();
-};
+
 const confimPayMethod = () => {
    console.log(PayMehtod);
    if (PayMehtod.value === 'creditCard') {
