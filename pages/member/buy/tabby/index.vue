@@ -112,30 +112,38 @@ const startTabbySession = () => {
 };
 
 const startTabbyPayment = (tabbyURL) => {
-   // notify(
-   //    "success",
-   //    $t(
-   //       "Page will be redirected to Tabby platform now.",
-   //       "سيتم إعادة توجيه الصفحة الآن إلى منصة تابي"
-   //    ),
-   //    2
-   // );
-   setTimeout(() => {
-      window.location.href = tabbyURL;
-   }, 1000);
+   console.log(tabbyUrl,":scream")
+   
 };
 
 watch(
    () => tabbyPaymentOptions.value?.isFinished,
    () => {
+      
+      const tabbyUrl = tabbyPaymentOptions.value?.data?.available_products?.[0].web_url
+      if (!tabbyUrl)
+      {
+         return;
+      }
       tabbyStatus.value = tabbyPaymentOptions.value?.data?.status
       const price = membership.value?.data?.price
       const lang = $t("en", "ar") 
+      console.log(tabbyUrl)
+   
+      notify(
+      "success",
+     [ $t(
+         "Page will be redirected to Tabby platform now.",
+         "سيتم إعادة توجيه الصفحة الآن إلى منصة تابي"
+      )]
+       );
+      location.replace(tabbyUrl);
+ 
      // if(tabbyStatus.value === 'created' && price){
-         tabbyCard.tabbyCard('SAR',price,lang)
-         tabbyPromo.tabbysnippet('SAR',price,lang)
+         // tabbyCard.tabbyCard('SAR',price,lang)
+         // tabbyPromo.tabbysnippet('SAR',price,lang)
       //}
-      if(tabbyStatus.value === 'rejected' && price){
+      if(tabbyStatus.value === 'rejected'){
          rejected.value = true;
       }
       
