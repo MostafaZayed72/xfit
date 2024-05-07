@@ -79,7 +79,7 @@ watch(
    () => {
       if (registerRequest.value.isFinished && !registerRequest.value.error) {
          loginRequest.value = login({
-            first_value: newUser.value.mobile_phone,
+            emailOrMobilePhone: newUser.value.mobile_phone,
             password: newUser.value.password,
          });
       }

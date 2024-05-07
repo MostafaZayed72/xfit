@@ -155,6 +155,8 @@ const promo = ref('')
 const PayMehtod = ref('creditCard');
 const confirmed = ref('');
 const membership = ref();
+console.log("hello response")
+
 const getMembership = () => {
    membership.value = useGetMembership();
    console.log(membership.value);
@@ -177,6 +179,8 @@ async function applyPromoCode() {
             data
          }
       );
+      
+
       notify('success', ['Promo code applied']);
       confirmed.value = true;
       if (!response?.data?.value) {

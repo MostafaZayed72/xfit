@@ -30,46 +30,10 @@
             <h4 class="mb-5">
                {{ $t("Tabby payment options", "خيارات دفع تابي") }}
             </h4>
-            <CommonXfitLoader v-if="
-               tamara_payment_types?.isLoading || !tamara_payment_types?.data
-            " />
-             <div class="mb-5 " v-else>
-               <div class="rounded-xl" v-for="payment_type in tamara_payment_types?.data" :key="payment_type.name">
-                  <div class="h-100 shadow-sm bg-light rounded-3  py-4 text-center" style="margin-top: 0.5cm;">
-                     <label class=" flex items-center ">
-                        <input type="radio" :value="payment_type.name" v-model="selectedPaymentType" class="w-[20px]">
-                        <p class=" lh-lg package-name ">
-                           <span v-if="payment_type.name === 'PAY_BY_INSTALMENTS'">
-                              <span class="me-2 ">{{ $t("Divide it into", "قسمها على") }}</span>
-                              <span class="me-1">{{ (payment_type.supported_instalments.length) + 1 }}</span>
-                              <span class="me-1">{{ $t("monthly payments of", "دفعات شهرية بقيمة") }}</span>
-                              <span class="me-1">{{ Number(membership.data.price /
-                                 ((payment_type.supported_instalments.length) + 1)).toLocaleString(undefined, {
-                                 maximumFractionDigits: 4 }) }}</span>
-                              <span class="me-1 inline-block">{{ $t("SAR", "ريال") }}</span>
-                              <span>{{ $t("without fees", "بدون رسوم") }}</span>
-                           </span>
-                           <span v-else-if="payment_type.name === 'PAY_NOW'">
-                              <span class="me-2">{{ $t("Pay now", " ادفعها كاملة بقيمة") }}</span>
-                              <span class="me-1">{{ membership.data.price }}</span>
-                              <span class="me-1"></span>
-                              <span class="me-1"></span>
-                              <span class="me-1 inline-block">{{ $t("SAR", "ريال") }}</span>
-                              <span>{{ $t("without fees", "بدون رسوم") }}</span>
-                           </span>
-                        </p>
-                     </label>
-                  </div>
-                  <div class="text-center mt-4" v-if="payment_type.name === 'PAY_NOW'">
-                     <ButtonsPrimary class="w-24 bg-cyan-500 choose"
+            <ButtonsPrimary class="w-24 bg-cyan-500 choose"
                      @click="startTabbyPayment(payment_type.web_url)">
                         {{ $t("Confirm", "تأكيد") }}
                      </ButtonsPrimary>
-                  </div>
-               </div>
-               <!-- Confirm Button outside the v-for loop -->
-
-            </div>
 
             <div>
                <p class="text-center text-cyan-500">
@@ -110,7 +74,8 @@
 </template>
 
 <script setup>
-
+console.log("hello")
+// استرجاع البيانات من الباك اند
 import * as tabbyPromo from "@/utils/tabbySnippet";
 import * as tabbyCard from "@/utils/tabbyCard";
 
