@@ -31,7 +31,10 @@
                   {{ $t("Remove Promo Code", "حذف البروموكود") }}
                </ButtonsPrimary>
             </div>
-            <h1 v-if="promo">{{ $t('Price after adding promo code : ', 'السعر بعج إضافة البرمو كود') }}</h1>
+            <div v-if="promo" class="flex items-center gap-4">
+               <h1 >{{ $t('Price after adding promo code : ', 'السعر بعد إضافة البرمو كود') }}</h1>
+              <h1 v-if="res"> {{ membership.data.price }} {{ $t('SAR', 'ريال') }}</h1>
+            </div>
             <!--END PROMO CODE -->
             <hr class="my-4" />
             <h4 class="mb-4 text-center">
@@ -174,19 +177,19 @@ async function applyPromoCode() {
          promo_code: promo.value,
       };
       const res = await useCustomAxios("memberships/add-promo-code-to-membership", {
-      method: "POST",
-      data
-   });
-   if (res.data.value.errors) {
-      throw res.data.value.errors;
-   }
-   membership.value = res;
-   confirmed.value = true;
-   notify('success', ['Promo code applied']);
-      
+         method: "POST",
+         data
+      });
+      if (res.data.value.errors) {
+         throw res.data.value.errors;
+      }
+      membership.value = res;
+      confirmed.value = true;
+      notify('success', ['Promo code applied']);
+
    } catch (error) {
       console.log(error?.response?.data?.message);
-      notify('danger', ['Cant apply promo code.',error?.response?.data?.message])
+      notify('danger', ['Cant apply promo code.', error?.response?.data?.message])
    }
 }
 async function removePromoCode() {
