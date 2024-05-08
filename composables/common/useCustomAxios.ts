@@ -37,14 +37,14 @@ export const useCustomAxios = (
          return response;
       },
       function (error) {
-         // if (!error.response) useCheckConnectionToServer();
-         // else if (error.response?.status == 401) logout();
-         // else if (error.response?.status == 500)
-            // notify("danger", [
-            //    "حدث خطأ من الخادم ، تم ارسال تنبيه لمسئول النظام",
-            // ]);
+         if (!error.response) useCheckConnectionToServer();
+         else if (error.response?.status == 401) logout();
+         else if (error.response?.status == 500)
+            notify("danger", [
+               "حدث خطأ من الخادم ، تم ارسال تنبيه لمسئول النظام",
+            ]);
 
-         // return Promise.reject(error);
+         return Promise.reject(error);
       }
    );
 
