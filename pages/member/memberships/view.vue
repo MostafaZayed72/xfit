@@ -41,10 +41,10 @@
                {{ $t("Payment options", "طرق الدفع") }}
             </h4>
             <div v-if="membership?.data?.package_status">
-               <div id="CreditCard" class=" flex justify-center items-center ">
+               <!-- <div id="CreditCard" class=" flex justify-center items-center ">
                   <input class="w-8" type="radio" v-model="PayMehtod" value="creditCard" />
                   <label class="flex-1 pt-3"> {{ $t("Credit cards", "البطاقة الائتمانية") }}</label>
-               </div>
+               </div> -->
                <div id="tamara" class=" flex justify-center items-center ">
                   <input class="w-8" type="radio" v-model="PayMehtod" value="tamara" />
                   <label class="flex-1 pt-3" for="tamara"> {{ $t("Pay with Tamara", "ادفعي مع تمارا") }} </label>
