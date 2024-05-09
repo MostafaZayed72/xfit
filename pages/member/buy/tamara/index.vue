@@ -60,12 +60,15 @@
                            </span>
                         </p>
                      </label>
+
+                     <div class="text-end">
+                        <ButtonsPrimary class="w-24 bg-cyan-500 choose " @click="startTamaraPayment(payment_type.name)">
+                           {{ $t("Confirm", "تأكيد") }}
+                        </ButtonsPrimary>
+                     </div>
+
                   </div>
-                  <div class="text-center mt-4" v-if="payment_type.name === 'PAY_NOW'">
-                     <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="startTamaraPayment(payment_type.name)">
-                        {{ $t("Confirm", "تأكيد") }}
-                     </ButtonsPrimary>
-                  </div>
+
                </div>
                <!-- Confirm Button outside the v-for loop -->
 

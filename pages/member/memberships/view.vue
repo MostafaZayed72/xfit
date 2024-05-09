@@ -32,15 +32,15 @@
                </ButtonsPrimary>
             </div>
             <div v-if="promo" class="flex items-center gap-4">
-               <h1 >{{ $t('Price after adding promo code : ', 'السعر بعد إضافة البرمو كود') }}</h1>
-              <h1 v-if="res"> {{ membership.data.price }} {{ $t('SAR', 'ريال') }}</h1>
+               <h1>{{ $t('Price after adding promo code : ', 'السعر بعد إضافة البرمو كود') }}</h1>
+               <h1 v-if="res"> {{ membership.data.price }} {{ $t('SAR', 'ريال') }}</h1>
             </div>
             <!--END PROMO CODE -->
             <hr class="my-4" />
-            <h4 class="mb-4 text-center">
+            <h4 v-if="!requiredData" class="mb-4 text-center">
                {{ $t("Payment options", "طرق الدفع") }}
             </h4>
-            <div v-if="membership?.data?.package_status">
+            <div v-if="membership?.data?.package_status && !requiredData">
                <!-- <div id="CreditCard" class=" flex justify-center items-center ">
                   <input class="w-8" type="radio" v-model="PayMehtod" value="creditCard" />
                   <label class="flex-1 pt-3"> {{ $t("Credit cards", "البطاقة الائتمانية") }}</label>
@@ -60,12 +60,26 @@
                <div v-show="PayMehtod === 'tabby'" class=" bg-white p-5 rounded-lg mx-5 my-3" id="tabbyCard"></div>
 
                <div class="py-3">
-                  <ButtonsPrimary class="w-24 bg-cyan-500 choose" @click="confimPayMethod">{{ $t("Confirm", "تأكيد") }}
+                  <ButtonsPrimary class="w-24 bg-cyan-500 " @click="confimPayMethod">{{ $t("Confirm", "تأكيد") }}
                   </ButtonsPrimary>
                </div>
 
             </div>
-            <div class="alert alert-danger text-center" v-else>
+            <div v-if="requiredData">
+               <h1 class="bg-red-darken-1 py-2 px-2  rounded">Please, complete your personal information.
+
+                  Go to your profile, and make sure you entered your phone number, email and national ID.
+                  <NuxtLink class="text-grey-lighten-1 " to="/member/profile">From here</NuxtLink>
+
+               </h1>
+               <h1 class="bg-red-darken-1 py-2 px-2  rounded">يرجى استكمال بياناتك الشخصية .
+
+                  اذهب إلى ملفك الشخصي ، وتأكد من ادخال رقم الجوال والبريد الالكتروني ورقم الهوية .
+                  <NuxtLink class="text-grey-lighten-1 " to="/member/profile">من هنا</NuxtLink>
+
+               </h1>
+            </div>
+            <div class="alert alert-danger text-center" v-if="!membership?.data?.package_status">
                <p>
                   {{
                      $t(
@@ -154,6 +168,14 @@ import * as tabbyCard from "@/utils/tabbyCard";
 import { useCustomAxios } from "~/composables/common/useCustomAxios";
 import { notify } from "~/composables/common/useNotifications";
 
+
+
+const phone = localStorage.getItem('phone')
+const email = localStorage.getItem('email')
+const national = localStorage.getItem('national')
+const requiredData = ref()
+
+
 const promo = ref('')
 const PayMehtod = ref('creditCard');
 const confirmed = ref('');
@@ -166,6 +188,10 @@ const getMembership = () => {
 };
 onBeforeMount(() => {
    getMembership()
+
+   if (phone == '' || email == '' || national == '') {
+      requiredData.value = true
+   }
 });
 async function applyPromoCode() {
    try {

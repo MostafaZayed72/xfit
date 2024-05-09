@@ -9,6 +9,7 @@
       <CommonXfitLoader v-if="profile?.isLoading && !profile?.data" />
 
       <section class="main-card rounded-xl mb-4 shadow-lg p-5" v-else>
+         hello {{profile.data }}
          <div class="mb-5">
             <label class="text-sm mb-1">
                {{ $t("First name", "الاسم الاول") }}
@@ -234,6 +235,10 @@ import { useUpdatePassword } from "@/composables/member/useUpdatePassword";
 import { validateEmail } from "@/utils/validateEmail";
 import { notify } from "@/composables/common/useNotifications";
 
+// hello
+const phone= ref()
+const email= ref()
+const national= ref()
 const { $t } = useNuxtApp();
 const profile = ref();
 const newValues = ref();
@@ -249,6 +254,7 @@ const passwords = ref({
    repeated: null,
 });
 
+
 onBeforeMount(() => getMemberProfile());
 
 const getMemberProfile = () => {
@@ -260,8 +266,10 @@ watch(
    () => {
       if (profile.value?.isFinished && !profile.value?.error)
          newValues.value = { ...profile.value.data };
+         phone.value= newValues.value.mobile_phone
    }
 );
+
 
 const updateClicked = (field) => {
    inputs.value[field] = !inputs.value[field];
@@ -270,18 +278,20 @@ const updateClicked = (field) => {
 const updateFieldRequest = ref();
 const updateRecord = (field) => {
    console.log(newValues.value[field]);
-   if (newValues.value[field] == profile.value.data[field]) return;
+   if (newValues.value[field] == profile.value.data[field]) return ;
    if (field == "email" && !validateEmail(newValues.value[field])) {
       let email_input = document.querySelector("#email_input");
       email_input.classList.add("is-invalid");
-      return notify("danger", [$t("Please, enter a valid email", 'يرجي ادخال بريد الكتروني صالح')]);
+      
+      return  notify("danger", [$t("Please, enter a valid email", 'يرجي ادخال بريد الكتروني صالح')]);
    }
 
    updateFieldRequest.value = useUpdateProfileField({
       [field]: newValues.value[field],
    });
-};
 
+   phone.value=newValues.mobile_phone.value
+};
 watch(
    () => updateFieldRequest.value?.isFinished,
    () => {
@@ -328,6 +338,19 @@ watch(
             ),
          ]);
       }
+      phone.value=newValues.value.mobile_phone
+      email.value=newValues.value.email
+      national.value=newValues.value.national_id
    }
-);
+   );
+
+watch(phone, (val)=>{
+   window.localStorage.setItem("phone",val)
+})
+watch(email, (val)=>{
+   window.localStorage.setItem("email",val)
+})
+watch(national, (val)=>{
+   window.localStorage.setItem("national",val)
+})
 </script>
