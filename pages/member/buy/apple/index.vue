@@ -127,8 +127,8 @@ async function charge () {
    }
    location.replace(url);
    } catch (err) {
-   console.log(err);
-   notify('danger',['Unable to pay with apple pay. Please try again later.']);
+   console.log(err.response.data.errors.email[0]);
+   notify('danger',[err.response.data.errors.email[0]]);
    } finally {
    loading.value = false;
    }
