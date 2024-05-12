@@ -20,16 +20,16 @@
                <p class="text-2xl">{{ $t('Branches') }}</p>
                <div class="mb-3 flex gap-1 justify-center flex-wrap text-center">
                   <h1
-                     class="badge bg-cyan-500 choose text-center px-1  rounded-lg"
+                     class="badge bg-grey-lighten-1 choose text-center px-1  rounded-lg"
                      v-for="branch in the_package.branches"
                      :key="branch.name"
                   >
                      {{branch.name}}
                </h1>
                </div>
-               <div class="bg-cyan-400 rounded">
+               <div class="bg-cyan-400 rounded w-fit px-2 mt-8">
                   <button
-                     class="btn btn-primary text-2xl choose "
+                     class="btn btn-primary choose"
                      @click="viewPackage(the_package.id)"
                   >
                      {{ $t('Choose the package', 'اختيار الباقة') }}
@@ -55,16 +55,16 @@
                <p class="text-2xl">{{ $t('Branches') }}</p>
                <div class="mb-3 flex gap-1 justify-center flex-wrap text-center">
                   <h1
-                     class="badge bg-cyan-500 choose text-center px-1  rounded-lg"
+                     class="badge bg-cyan-500 bg-grey-lighten-1 choose text-center px-1  rounded-lg"
                      v-for="branch in the_package.branches"
                      :key="branch.name"
                   >
                      {{branch.name}}
                </h1>
                </div>
-               <div class="bg-cyan-400 rounded">
+               <div class="bg-cyan-400 rounded mt-6 w-fit px-2">
                   <button
-                     class="btn btn-primary text-2xl choose "
+                     class="btn btn-primary choose "
                      @click="viewPackage(the_package.id)"
                   >
                      {{ $t('Choose the package', 'اختيار الباقة') }}

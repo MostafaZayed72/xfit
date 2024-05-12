@@ -26,9 +26,7 @@
             <h4 class="mb-5">
                {{ $t("payment", "الدفع") }}
             </h4>
-            <CommonXfitLoader v-if="
-               tamara_payment_types?.isLoading || !tamara_payment_types?.data
-            " />
+            
             <div class="flex flex-col-reverse md:flex-row justify-center gap-4 items-center">
                <p class="text-center text-cyan-500">
                   <span class="text-sm inline-block me-1">

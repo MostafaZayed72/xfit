@@ -28,26 +28,9 @@
             </h4>
 
 
-            <div class="my-10 flex flex-col justify-center">
-               <div class="flex items-center gap-2">
-                  <Icon class="text-4xl" name="material-symbols:credit-card-outline-sharp" />
-                  <input style="border-bottom: 1px solid;" type="text" placeholder="Card Number">
-               </div>
-               <div class="flex items-center gap-2 mt-6">
-                  <Icon class="text-4xl" name="fa6-brands:cc-visa" />
-                  <div class="flex items-center w-100 gap-4"><input style="border-bottom: 1px solid;" type="text" placeholder="MM/YY">
-                     <input style="border-bottom: 1px solid;" type="text" placeholder="CVV">
-                  </div>
-               </div>
-               <div class="flex items-center gap-2 mt-6">
-                  <Icon class="text-4xl" name="logos:mastercard" />
-                  <input style="border-bottom: 1px solid;" type="text" placeholder="Card Holder Name">
-               </div>
+          <TapPay />
 
-            </div>
-
-
-            <div class="flex flex-col-reverse md:flex-row justify-center gap-4 items-center">
+            <div class="flex flex-col-reverse md:flex-row justify-center gap-4 items-center mt-10">
                <p class="text-center text-cyan-500">
                   <span class="text-sm inline-block me-1">
                      {{
@@ -66,13 +49,9 @@
                      }}
                   </a>
                </p>
-               <div class="flex justify-center gap-4 items-center">
-                  <h1>{{ $t('Package price:', 'سعر الباقة:') }} {{ membership.data?.price }} {{ $t('SAR', 'ريال') }}
+               <h1>{{ $t('Package price:', 'سعر الباقة:') }} {{ membership.data?.price }} {{ $t('SAR', 'ريال') }}
                   </h1>
-                  <ButtonsPrimary :isLoading="loading" class="w-24 bg-cyan-500 choose" @click="charge">
-                     {{ $t("Confirm", "تأكيد") }}
-                  </ButtonsPrimary>
-               </div>
+               
             </div>
          </section>
       </div>

@@ -1,160 +1,193 @@
 <template>
-   <div class=" text-center mship md:mb-16">
-      <NuxtLink class="sm:text-sm md:text-5xl" to="/">{{ $t("Home", "الرئيسية") }}</NuxtLink>
-      <span class="mx-2 text-sm md:text-5xl">/</span>
-      <NuxtLink to="/packages" class="text-sm md:text-5xl">
-         {{ $t("Membership packages", "باقات الاشتراك") }}
-      </NuxtLink>
-      <span class="mx-2 text-sm md:text-5xl">/</span>
-      <span class="text-sm md:text-5xl">{{ $t("Buy a package", "شراء باقة") }}</span>
-   </div>
-   <hr class="my-5" />
-   <main>
-      <CommonXfitLoader v-if="
-         (thePackage?.isLoading || memberInformationIsRequired?.isLoading) &&
-         (!thePackage?.isFinished ||
-            !memberInformationIsRequired?.isFinished)
-      " />
-
-      <div class="bg-[var(--c9)] mb-5 p-5 shadow-lg rounded-xl" v-if="
-         memberInformationIsRequired?.isFinished &&
-         memberInformationIsRequired?.data
-      ">
-         <p class="mb-3 text-[var(--c1)]">
-            {{
-               $t(
-                  "Please, complete your personal information.",
-                  "يرجي استكمال بياناتك الشخصية."
-               )
-            }}
-         </p>
-         <p class="mb-5 text-[var(--c1)]">
-            {{
-               $t(
-                  "Go to your profile, and make sure you entered your phone number, email and national ID.",
-                  "يرجى الذهاب إلى ملفك الشخصي والتأكد من ادخال رقم الهوية ورقم الجوال والبريد الالكتروني."
-               )
-            }}
-         </p>
-         <p class="text-end">
-            <ButtonsSecondary class="w-56 bg-[var(--c7)]" @click="navigateTo('/member/profile')">
-               {{ $t("Go to your profile", "الذهاب إلى ملفك الشخصي") }}
-            </ButtonsSecondary>
-         </p>
+   <form id="form-container" method="post" action="/charge">
+      <!-- Tap element will be here -->
+      <div id="element-container"></div>
+      <div id="error-handler" role="alert"></div>
+      <div id="success" style="display: none; position: relative; float: left;">
+         Success! Your token is <span id="token"></span>
       </div>
-
-      <div v-if="thePackage?.data" class="main-card rounded-xl shadow-lg p-5">
-         <p class="mb-5">{{ thePackage.data.name }}</p>
-         <h3 class="mb-4">
-            <span class="font-bold text-4xl me-2">
-               {{ thePackage.data?.price.toLocaleString() }}
-            </span>
-            <span>{{ $t("SAR", "ريال") }}</span>
-         </h3>
-         <div class="text-end">
-            <a href="javascript:;" class="w-36 underline text-sm" @click="navigateTo('/packages')">
-               {{ $t("Choose another package", "اختاري باقة اخري") }}
-            </a>
-         </div>
-
-         <hr class="my-5" />
-
-         <div v-if="!selectedBranch">
-            <p class="text-start mb-3">
-               {{ $t("Choose a branch", "اختاري الفرع") }}
-            </p>
-            <div class="flex flex-wrap gap-3 mb-8">
-               <a href="javascript:;" class="bg-cyan-500 choose py-1 px-2 rounded-xl"
-                  v-for="branch in thePackage.data.branches" :key="branch.name" @click="selectBranch(branch)">
-                  {{ branch.name }}
-               </a>
-            </div>
-         </div>
-
-         <div v-else class="mb-3">
-            <span class="inline-block me-2">{{ $t("Branch", "الفرع") }}</span>
-            <span class="inline-block text-[var(--c2)] bg-[var(--c1)] py-1 px-2 me-2 rounded-xl">
-               {{ selectedBranch.name }}
-            </span>
-            <a href="javascript:;" class="inline-block underline text-sm" @click="selectedBranch = null">
-               {{ $t("Change", "تغيير") }}
-            </a>
-         </div>
-
-         <hr class="my-5" />
-
-         <div class="mb-5">
-            <label class="block mb-2">
-               {{ $t("Membership start date", "تاريخ بداية الاشتراك") }}
-            </label>
-            <input type="date" class="w-full bg-[var(--c1)] text-black" :min="thePackage.data.min_membership_start_date"
-               :max="thePackage.data.max_membership_start_date" v-model="newMembership.membership_start_date" />
-         </div>
-
-         <div class="text-end ">
-            <ButtonsPrimary class="w-20 bg-cyan-400 choose" :isLoading="createMembershipRequest?.isLoading"
-               :disabled="memberInformationIsRequired?.data" @click="createMembership()">
-               {{ $t("Confirm", "تأكيد") }}
-            </ButtonsPrimary>
-         </div>
-      </div>
-   </main>
+      <!-- Tap pay button -->
+      <button id="tap-btn">Submit</button>
+   </form>
 </template>
 
-<script setup>
-import { useGetPackage } from "@/composables/packages/useGetPackage";
-import { useCheckMemberRequiredInformation } from "@/composables/member/useCheckMemberRequiredInformation";
-import { useCreateMembership } from "@/composables/memberships/useCreateMembership";
-import { viewMembership } from "@/utils/view/viewMembership";
+<script>
 
-const memberInformationIsRequired = ref({ data: true });
-const thePackage = ref();
-const selectedBranch = ref();
-const newMembership = ref({
-   package_id: null,
-   branch_id: null,
-   membership_start_date: null,
+
+
+   //pass your public key from tap's dashboard
+var tap = Tapjsli('pk_test_EtHFV4BuPQokJT6jiROls87Y');
+
+var elements = tap.elements({});
+
+var style = {
+  base: {
+    color: '#535353',
+    lineHeight: '18px',
+    fontFamily: 'sans-serif',
+    fontSmoothing: 'antialiased',
+    fontSize: '16px',
+    '::placeholder': {
+      color: 'rgba(0, 0, 0, 0.26)',
+      fontSize:'15px'
+    }
+  },
+  invalid: {
+    color: 'red'
+  }
+};
+// input labels/placeholders
+var labels = {
+    cardNumber:"Card Number",
+    expirationDate:"MM/YY",
+    cvv:"CVV",
+    cardHolder:"Card Holder Name"
+  };
+//payment options
+var paymentOptions = {
+  currencyCode:["KWD","USD","SAR"], //change the currency array as per your requirement
+  labels : labels,
+  TextDirection:'ltr', //only two values valid (rtl, ltr)
+  paymentAllowed: ['VISA', 'MASTERCARD', 'AMERICAN_EXPRESS', 'MADA'] //default string 'all' to show all payment methods enabled on your account
+}
+//create element, pass style and payment options
+var card = elements.create('card', {style: style},paymentOptions);
+//mount element
+export default {
+  mounted() {
+    card.mount('#element-container');
+  }
+}//card change event listener
+card.addEventListener('change', function(event) {
+  if(event.loaded){ //If ‘true’, js library is loaded
+    console.log("UI loaded :"+event.loaded);
+    console.log("current currency is :"+card.getCurrency())
+  }
+  var displayError = document.getElementById('error-handler');
+  if (event.error) {
+    displayError.textContent = event.error.message;
+  } else {
+    displayError.textContent = '';
+    console.log('not loaded')
+  }
 });
 
-onBeforeMount(() => {
-   getPackage();
-   checkMemberRequiredInformation();
-});
 
-const getPackage = () => {
-   thePackage.value = useGetPackage();
-};
-
-const checkMemberRequiredInformation = () => {
-   memberInformationIsRequired.value = useCheckMemberRequiredInformation();
-};
-
-const selectBranch = (branch) => {
-   selectedBranch.value = branch;
-};
-
-const createMembershipRequest = ref();
-const createMembership = () => {
-   newMembership.value.package_id = thePackage.value?.data.id;
-   newMembership.value.branch_id = selectedBranch.value?.branch_id;
-
-   createMembershipRequest.value = useCreateMembership(
-      memberInformationIsRequired.value?.data,
-      thePackage.value?.data.min_membership_start_date,
-      thePackage.value?.data.max_membership_start_date,
-      newMembership.value
-   );
-};
-
-watch(
-   () => createMembershipRequest.value?.isFinished,
-   () => {
-      if (
-         createMembershipRequest.value.isFinished &&
-         !createMembershipRequest.value.error
-      ) {
-         viewMembership(createMembershipRequest.value.data.id);
-      }
-   }
-);
 </script>
+
+<style>
+.form-row {
+   width: 70%;
+   float: left;
+   background-color: #ededed;
+}
+
+#card-element {
+   background-color: transparent;
+   height: 40px;
+   border-radius: 4px;
+   border: 1px solid transparent;
+   box-shadow: 0 1px 3px 0 #e6ebf1;
+   -webkit-transition: box-shadow 150ms ease;
+   transition: box-shadow 150ms ease;
+}
+
+#card-element--focus {
+   box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+#card-element--invalid {
+   border-color: #fa755a;
+}
+
+#card-element--webkit-autofill {
+   background-color: #fefde5 !important;
+}
+
+#submitbutton,
+#tap-btn {
+   align-items: flex-start;
+   background-attachment: scroll;
+   background-clip: border-box;
+   background-color: rgb(50, 50, 93);
+   background-image: none;
+   background-origin: padding-box;
+   background-position-x: 0%;
+   background-position-y: 0%;
+   background-size: auto;
+   border-bottom-color: rgb(255, 255, 255);
+   border-bottom-left-radius: 4px;
+   border-bottom-right-radius: 4px;
+   border-bottom-style: none;
+   border-bottom-width: 0px;
+   border-image-outset: 0px;
+   border-image-repeat: stretch;
+   border-image-slice: 100%;
+   border-image-source: none;
+   border-image-width: 1;
+   border-left-color: rgb(255, 255, 255);
+   border-left-style: none;
+   border-left-width: 0px;
+   border-right-color: rgb(255, 255, 255);
+   border-right-style: none;
+   border-right-width: 0px;
+   border-top-color: rgb(255, 255, 255);
+   border-top-left-radius: 4px;
+   border-top-right-radius: 4px;
+   border-top-style: none;
+   border-top-width: 0px;
+   box-shadow: rgba(50, 50, 93, 0.11) 0px 4px 6px 0px, rgba(0, 0, 0, 0.08) 0px 1px 3px 0px;
+   box-sizing: border-box;
+   color: rgb(255, 255, 255);
+   cursor: pointer;
+   display: block;
+   float: left;
+   font-family: "Helvetica Neue", Helvetica, sans-serif;
+   font-size: 15px;
+   font-stretch: 100%;
+   font-style: normal;
+   font-variant-caps: normal;
+   font-variant-east-asian: normal;
+   font-variant-ligatures: normal;
+   font-variant-numeric: normal;
+   font-weight: 600;
+   height: 35px;
+   letter-spacing: 0.375px;
+   line-height: 35px;
+   margin-bottom: 0px;
+   margin-left: 12px;
+   margin-right: 0px;
+   margin-top: 28px;
+   outline-color: rgb(255, 255, 255);
+   outline-style: none;
+   outline-width: 0px;
+   overflow-x: visible;
+   overflow-y: visible;
+   padding-bottom: 0px;
+   padding-left: 14px;
+   padding-right: 14px;
+   padding-top: 0px;
+   text-align: center;
+   text-decoration-color: rgb(255, 255, 255);
+   text-decoration-line: none;
+   text-decoration-style: solid;
+   text-indent: 0px;
+   text-rendering: auto;
+   text-shadow: none;
+   text-size-adjust: 100%;
+   text-transform: none;
+   transition-delay: 0s;
+   transition-duration: 0.15s;
+   transition-property: all;
+   transition-timing-function: ease;
+   white-space: nowrap;
+   width: 150.781px;
+   word-spacing: 0px;
+   writing-mode: horizontal-tb;
+   -webkit-appearance: none;
+   -webkit-font-smoothing: antialiased;
+   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+   -webkit-border-image: none;
+
+}
+</style>

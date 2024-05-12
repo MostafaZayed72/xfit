@@ -9,7 +9,6 @@
       <CommonXfitLoader v-if="profile?.isLoading && !profile?.data" />
 
       <section class="main-card rounded-xl mb-4 shadow-lg p-5" v-else>
-         hello {{profile.data }}
          <div class="mb-5">
             <label class="text-sm mb-1">
                {{ $t("First name", "الاسم الاول") }}
@@ -37,28 +36,16 @@
                </span>
             </p>
             <div v-else>
-               <form
-                  class="d-flex w-100"
-                  action="javascript:;"
-                  @submit.prevent="updateRecord('mobile_phone')"
-               >
+               <form class="d-flex w-100" action="javascript:;" @submit.prevent="updateRecord('mobile_phone')">
                   <div class="mb-2">
-                     <input
-                        type="text"
-                        class="form-control form-control-sm"
-                        :placeholder="$t('Mobile phone', 'رقم الجوال')"
-                        aria-label="Example text with two button addons"
-                        ref="mobile_phone"
-                        v-model="newValues.mobile_phone"
-                     />
+                     <input type="text" class="form-control form-control-sm"
+                        :placeholder="$t('Mobile phone', 'رقم الجوال')" aria-label="Example text with two button addons"
+                        ref="mobile_phone" v-model="newValues.mobile_phone" />
                   </div>
                   <ButtonsPrimary class="me-1" type="submit">
                      {{ $t("Save", "حفظ") }}
                   </ButtonsPrimary>
-                  <ButtonsSecondary
-                     class="btn btn-secondary btn-sm"
-                     @click="updateClicked('mobile_phone')"
-                  >
+                  <ButtonsSecondary class="btn btn-secondary btn-sm" @click="updateClicked('mobile_phone')">
                      {{ $t("Cancel", "إلغاء") }}
                   </ButtonsSecondary>
                </form>
@@ -78,28 +65,15 @@
                </span>
             </p>
             <div v-else>
-               <form
-                  class="d-flex w-100"
-                  action="javascript:;"
-                  @submit.prevent="updateRecord('email')"
-               >
+               <form class="d-flex w-100" action="javascript:;" @submit.prevent="updateRecord('email')">
                   <div class="mb-2">
-                     <input
-                        type="text"
-                        id="email_input"
-                        class="form-control form-control-sm"
-                        :placeholder="$t('Email', 'البريد الالكتروني')"
-                        ref="email"
-                        v-model="newValues.email"
-                     />
+                     <input type="text" id="email_input" class="form-control form-control-sm"
+                        :placeholder="$t('Email', 'البريد الالكتروني')" ref="email" v-model="newValues.email" />
                   </div>
                   <ButtonsPrimary class="me-1" type="submit">
                      {{ $t("Save", "حفظ") }}
                   </ButtonsPrimary>
-                  <ButtonsSecondary
-                     class="btn btn-secondary btn-sm"
-                     @click="updateClicked('email')"
-                  >
+                  <ButtonsSecondary class="btn btn-secondary btn-sm" @click="updateClicked('email')">
                      {{ $t("Cancel", "إلغاء") }}
                   </ButtonsSecondary>
                </form>
@@ -119,29 +93,16 @@
                </span>
             </div>
             <div v-else>
-               <form
-                  class="d-flex w-100"
-                  action="javascript:;"
-                  @submit.prevent="updateRecord('national_id')"
-               >
+               <form class="d-flex w-100" action="javascript:;" @submit.prevent="updateRecord('national_id')">
                   <div class="mb-2">
-                     <input
-                        type="number"
-                        class="form-control form-control-sm"
-                        min="1000000000"
-                        :placeholder="$t('National ID', 'رقم الهوية')"
-                        aria-label="Example text with two button addons"
-                        ref="national_id"
-                        v-model="newValues.national_id"
-                     />
+                     <input type="number" class="form-control form-control-sm" min="1000000000"
+                        :placeholder="$t('National ID', 'رقم الهوية')" aria-label="Example text with two button addons"
+                        ref="national_id" v-model="newValues.national_id" />
                   </div>
                   <ButtonsPrimary class="me-1" type="submit">
                      {{ $t("Save", "حفظ") }}
                   </ButtonsPrimary>
-                  <ButtonsSecondary
-                     class="btn btn-secondary btn-sm"
-                     @click="updateClicked('national_id')"
-                  >
+                  <ButtonsSecondary class="btn btn-secondary btn-sm" @click="updateClicked('national_id')">
                      {{ $t("Cancel", "إلغاء") }}
                   </ButtonsSecondary>
                </form>
@@ -166,49 +127,28 @@
                      <label for="oldPassword" class="col-form-label">
                         {{ $t("Current password", 'كلمة المرور الحالية') }}
                      </label>
-                     <input
-                        type="password"
-                        id="oldPassword"
-                        class="form-control form-control-sm"
-                        v-model="passwords.current"
-                        required
-                     />
+                     <input type="password" id="oldPassword" class="form-control form-control-sm"
+                        v-model="passwords.current" required />
                   </div>
                   <div class="mb-2">
                      <label for="newPassword" class="col-form-label">
                         {{ $t("New password", 'كلمة المرور الجديدة') }}
                      </label>
-                     <input
-                        type="password"
-                        id="newPassword"
-                        class="form-control form-control-sm"
-                        v-model="passwords.new"
-                        required
-                     />
+                     <input type="password" id="newPassword" class="form-control form-control-sm"
+                        v-model="passwords.new" required />
                   </div>
                   <div class="mb-2">
                      <label for="repeatedPassword" class="col-form-label">
                         {{ $t("Repeat password", 'إعادة كلمة المرور') }}
                      </label>
-                     <input
-                        type="password"
-                        id="repeatedPassword"
-                        class="form-control form-control-sm"
-                        v-model="passwords.repeated"
-                        required
-                     />
+                     <input type="password" id="repeatedPassword" class="form-control form-control-sm"
+                        v-model="passwords.repeated" required />
                   </div>
                   <div>
-                     <ButtonsPrimary
-                        class="me-1"
-                        :isLoading="updatePasswordRequest?.isLoading"
-                     >
+                     <ButtonsPrimary class="me-1" :isLoading="updatePasswordRequest?.isLoading">
                         {{ $t("Save", "حفظ") }}
                      </ButtonsPrimary>
-                     <ButtonsSecondary
-                        class="btn btn-secondary btn-sm"
-                        @click="updateClicked('password')"
-                     >
+                     <ButtonsSecondary class="btn btn-secondary btn-sm" @click="updateClicked('password')">
                         {{ $t("Cancel", "إلغاء") }}
                      </ButtonsSecondary>
                   </div>
@@ -236,9 +176,9 @@ import { validateEmail } from "@/utils/validateEmail";
 import { notify } from "@/composables/common/useNotifications";
 
 // hello
-const phone= ref()
-const email= ref()
-const national= ref()
+const phone = ref('')
+const email = ref('')
+const national = ref('')
 const { $t } = useNuxtApp();
 const profile = ref();
 const newValues = ref();
@@ -266,7 +206,9 @@ watch(
    () => {
       if (profile.value?.isFinished && !profile.value?.error)
          newValues.value = { ...profile.value.data };
-         phone.value= newValues.value.mobile_phone
+      phone.value = newValues.value.mobile_phone
+      email.value = newValues.value.email
+      national.value = newValues.value.national_id
    }
 );
 
@@ -278,23 +220,38 @@ const updateClicked = (field) => {
 const updateFieldRequest = ref();
 const updateRecord = (field) => {
    console.log(newValues.value[field]);
-   if (newValues.value[field] == profile.value.data[field]) return ;
+   if (newValues.value[field] == profile.value.data[field]) return;
    if (field == "email" && !validateEmail(newValues.value[field])) {
       let email_input = document.querySelector("#email_input");
       email_input.classList.add("is-invalid");
-      
-      return  notify("danger", [$t("Please, enter a valid email", 'يرجي ادخال بريد الكتروني صالح')]);
+
+      return notify("danger", [$t("Please, enter a valid email", 'يرجي ادخال بريد الكتروني صالح')]);
    }
 
    updateFieldRequest.value = useUpdateProfileField({
       [field]: newValues.value[field],
    });
 
-   phone.value=newValues.mobile_phone.value
+   phone.value = newValues.mobile_phone.value
+   email.value = newValues.email.value
+   national.value = newValues.national_id.value
+
 };
 watch(
    () => updateFieldRequest.value?.isFinished,
    () => {
+      watch(email, (val) => {
+   window.localStorage.setItem("email", val)
+})
+
+watch(phone, (val) => {
+   window.localStorage.setItem("phone", val)
+})
+
+watch(national, (val) => {
+   window.localStorage.setItem("national", val)
+})
+
       if (
          updateFieldRequest.value.isFinished &&
          !updateFieldRequest.value.error
@@ -338,19 +295,30 @@ watch(
             ),
          ]);
       }
-      phone.value=newValues.value.mobile_phone
-      email.value=newValues.value.email
-      national.value=newValues.value.national_id
-   }
-   );
 
-watch(phone, (val)=>{
-   window.localStorage.setItem("phone",val)
+      national.value = newValues.value.national_id
+
+      email.value = newValues.value.email
+
+      phone.value = newValues.value.mobile_phone
+   }
+);
+
+
+   window.localStorage.setItem("email", email.value),
+   window.localStorage.setItem("national", national.value)
+
+
+watch(email, (val) => {
+   window.localStorage.setItem("email", val)
 })
-watch(email, (val)=>{
-   window.localStorage.setItem("email",val)
+
+watch(phone, (val) => {
+   window.localStorage.setItem("phone", val)
 })
-watch(national, (val)=>{
-   window.localStorage.setItem("national",val)
+
+watch(national, (val) => {
+   window.localStorage.setItem("national", val)
 })
+
 </script>

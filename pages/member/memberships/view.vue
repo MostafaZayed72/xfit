@@ -41,10 +41,10 @@
                {{ $t("Payment options", "طرق الدفع") }}
             </h4>
             <div v-if="membership?.data?.package_status && !requiredData">
-               <!-- <div id="CreditCard" class=" flex justify-center items-center ">
+               <div id="CreditCard" class=" flex justify-center items-center ">
                   <input class="w-8" type="radio" v-model="PayMehtod" value="creditCard" />
                   <label class="flex-1 pt-3"> {{ $t("Credit cards", "البطاقة الائتمانية") }}</label>
-               </div> -->
+               </div>
                <div id="tamara" class=" flex justify-center items-center ">
                   <input class="w-8" type="radio" v-model="PayMehtod" value="tamara" />
                   <label class="flex-1 pt-3" for="tamara"> {{ $t("Pay with Tamara", "ادفعي مع تمارا") }} </label>
@@ -60,13 +60,13 @@
                <div v-show="PayMehtod === 'tabby'" class=" bg-white p-5 rounded-lg mx-5 my-3" id="tabbyCard"></div>
 
                <div class="py-3">
-                  <ButtonsPrimary class="w-24 bg-cyan-500 " @click="confimPayMethod">{{ $t("Confirm", "تأكيد") }}
+                  <ButtonsPrimary class="w-24 bg-cyan-500 choose " @click="confimPayMethod">{{ $t("Confirm", "تأكيد") }}
                   </ButtonsPrimary>
                </div>
 
             </div>
             <div v-if="requiredData">
-               <h1 class="bg-red-darken-1 py-2 px-2  rounded">Please, complete your personal information.
+               <h1 class="bg-red-darken-1 py-2 px-2  rounded mb-4">Please, complete your personal information.
 
                   Go to your profile, and make sure you entered your phone number, email and national ID.
                   <NuxtLink class="text-grey-lighten-1 " to="/member/profile">From here</NuxtLink>
@@ -189,7 +189,7 @@ const getMembership = () => {
 onBeforeMount(() => {
    getMembership()
 
-   if (phone == '' || email == '' || national == '') {
+   if (phone == 'null' || email == 'null' || national == 'null') {
       requiredData.value = true
    }
 });

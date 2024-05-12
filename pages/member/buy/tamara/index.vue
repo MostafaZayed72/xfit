@@ -13,7 +13,6 @@
          </p>
       </div>
       <hr class="my-5" />
-      hello {{ tamara_payment_types.length }}
       <CommonXfitLoader v-if="membership?.isLoading && !membership?.data" />
 
       <div class="bg-[var(--c3)] rounded-xl mb-4 shadow-lg p-5 main-card" v-else>

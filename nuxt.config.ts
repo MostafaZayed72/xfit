@@ -2,6 +2,7 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
+   
    devtools: { enabled: true },
    base: '/nuxt-app/',
    build: {
@@ -15,7 +16,7 @@ export default defineNuxtConfig({
       },
    ],
 
-   modules: ['@nuxtjs/tailwindcss','@nuxtjs/color-mode','nuxt-icon', 
+   modules: ['@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'nuxt-icon',
       (_options, nuxt) => {
          nuxt.hooks.hook('vite:extendConfig', (config) => {
             // @ts-expect-error
@@ -24,6 +25,9 @@ export default defineNuxtConfig({
       },
       //...
    ],
+   pinia: {
+      storesDirs: ['./stores/**', './custom-folder/stores/**'],
+   },
    vite: {
       vue: {
          template: {
@@ -39,6 +43,9 @@ export default defineNuxtConfig({
    ],
    app: {
       head: {
+         meta: [
+            { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }
+         ],
          link: [
             {
                rel: "icon",
@@ -47,6 +54,8 @@ export default defineNuxtConfig({
             },
          ],
          script: [
+            { src: 'https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js' },
+            { src: 'https://secure.gosell.io/js/sdk/tap.min.js' },
             {
                src: "https://checkout.tabby.ai/tabby-promo.js",
                tagPosition: "bodyClose",
