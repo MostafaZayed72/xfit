@@ -2,13 +2,10 @@ const DEV_AUTH_KEY = 'pk_test_Fb1AGPBOUqrnamTCEj4c62il';
 const PRO_AUTH_KEY = 'pk_live_NJI7KQrf4OgCMRhAeHFTxmLl';
 
 export  function useTap(){
-    function init(dir: 'ltr' | 'rtl') {
-        console.log("Here ?")
-        //pass your public key from tap's dashboard // if development locale use the dev
+    function init(dir: 'ltr' | 'rtl') {        //pass your public key from tap's dashboard // if development locale use the dev
+        // @ts-expect-error tapjsli is global variable imported by the script in the nuxt config 
         const tap = Tapjsli(DEV_AUTH_KEY)
-  
         const elements = tap.elements({})
-  
         const style = {
            base: {
               color: '#535353',
@@ -37,24 +34,18 @@ export  function useTap(){
            currencyCode: ['KWD', 'USD', 'SAR'],
            labels: labels,
            TextDirection: dir,
-           // TextDirection: 'ltr',
         }
         //create element, pass style and payment options
         const card = elements.create('card', { style: style }, paymentOptions)
         //mount element
         setTimeout(() => {
            card.mount('#element-container')
-        }, 600)
+        }, 2000)
   
-        return { tap: tap, card: card }
+        return { tap,card }
      }
-     function createToken(tap:any, card:any) {
-        return tap.createToken(card)
-     }
-
      return {
         init,
-        createToken
      }
    
 }

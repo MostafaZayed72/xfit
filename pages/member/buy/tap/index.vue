@@ -15,21 +15,31 @@
       <CommonXfitLoader v-if="membership?.isLoading && !membership?.data" />
       <div class="bg-[var(--c3)] rounded-xl mb-4 shadow-lg p-5 main-card" v-else>
          <MembershipInformation :membership="membership?.data" />
+         
          <section class="text-end mt-3">
             <nuxt-link class="underline" to="/member/memberships/view">
                {{ $t("Change payment method", "تغيير طريقة الدفع") }}
             </nuxt-link>
          </section>
          <section>
-
             <hr class="my-4" />
             <h4 class="mb-5">
-               {{ $t("payment", "الدفع") }}
+               {{ $t("Payment", "الدفع") }}
             </h4>
-
-
-          <TapPay />
-
+            <!-- payment container that the plugin inject the card container into  -->
+            <form id="form-container" method="post" @submit.prevent="generateToken">
+               <!-- Tap element will be here -->
+               <div id="element-container"></div>
+               <div id="error-handler" role="alert"></div>
+               <div id="success" style="display: none; position: relative; float: left;">
+                  Success! Your token is <span id="token"></span>
+               </div>
+               <!-- Tap pay button -->
+               <button id="tap-btn" class="w-20 py-1 text-center rounded bg-cyan-500 choose mt-6 mx-auto" :disabled="loading">
+                  <template v-if="loading">Loading ... </template>
+                  <template v-else> {{ $t("Confirm", "تأكيد") }}</template>
+               </button>
+            </form>
             <div class="flex flex-col-reverse md:flex-row justify-center gap-4 items-center mt-10">
                <p class="text-center text-cyan-500">
                   <span class="text-sm inline-block me-1">
@@ -49,9 +59,8 @@
                      }}
                   </a>
                </p>
-               <h1>{{ $t('Package price:', 'سعر الباقة:') }} {{ membership.data?.price }} {{ $t('SAR', 'ريال') }}
-                  </h1>
-               
+              
+
             </div>
          </section>
       </div>
@@ -59,7 +68,7 @@
       <CommonModal :title="$t('Terms and conditions', 'الاحكام والشروط')" modalID="terms-and-conditions-modal">
          <div>
             <p v-for="term in membershipTerms" :key="term">
-               <small>{{ $t(term) }}</small>
+               <small>{{ $t('Term', 'الشرط') }}</small>
             </p>
             <CommonModalHR />
             <div class="text-end">
@@ -90,49 +99,87 @@ const terms = computed(() => membershipTerms);
 const submitDisabled = ref(false);
 
 // tap payment
-const { init, createToken } = useTap();
-const tabInit = ref();
-const generatedToken = ref();
+const { init } = useTap();
+const loading = ref(false);
+const tabInit = ref<{
+   card: any,
+   tap: any
+}>();
+onMounted(async () => {
+   await nextTick();
+   tabInit.value = init('ltr');
+})
 
-onMounted(() => {
-   tabInit.value = init();
+watch(() => tabInit.value?.card, () => {
+   if (!tabInit.value?.card) return ;
+   const card = tabInit.value.card
+   card.addEventListener('change', function (event) {
+      if (event.loaded) {
+         console.log("UI loaded :" + event.loaded);
+         console.log("current currency is :" + card.getCurrency())
+      }
+      const displayError = document.getElementById('error-handler');
+      if (!displayError) return ;
+      if (event.error) {
+         displayError.textContent = event.error.message;
+      } else {
+         displayError.textContent = '';
+      }
+   });
 })
 
 async function generateToken() {
-   if (submitDisabled.value) return
-   generatedToken.value = await createToken(
-      tabInit.tab,
-      tabInit.card
-   );
-   submitDisabled.value = true;
+   try {
+      loading.value = true;
+      if (!tabInit.value) {
+         throw new Error('Failed to initialize Tap');
+      }
+      console.log(tabInit.value.card);
+      const res = await tabInit.value.tap.createToken(tabInit.value.card)
+      console.log('generate token response', res);
+      if (!res) {
+         throw new Error('Failed to generate token');
+      }
+      if (res.error)
+      {
+         throw new Error(res.error.message);
+      }
+      await charge(res.id);
+   } catch (err) {
+      console.log(err);
+      // @ts-expect-error err of type unknown
+      notify('danger', [err.message]);
+   } finally {
+      loading.value = false;
+   }
 }
 
-const loading = ref();
-async function charge() {
+async function charge(generatedTokenId: string) {
    try {
       loading.value = true;
       const res = await useMembershipTapChargeApplePay(
          {
             membership_id: membership.value.data.id,
-            token_id: 'src_apple_pay',
+            token_id: generatedTokenId,
          }
       )
       const url = res.data?.value?.url;
       if (!url) {
          throw res.error;
       }
+      notify('success',['Please wait while you are redirected to the payment gateway.']);
       location.replace(url);
    } catch (err) {
+      // @ts-expect-error err of type unknown
       console.log(err.response.data.errors.email[0]);
-      notify('danger', [err.response.data.errors.email[0]]);
+      // @ts-expect-error err of type unknown
+      notify('danger', [err.response.data.errors.email[0] || 'Failed to charge via tap. please contact the support.']);
    } finally {
       loading.value = false;
    }
 }
 
-// const apple= ()=>{
-//    navigateTo('https://checkout.beta.tap.company/?mode=page&themeMode=&language=en&token=eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY2MzdkZjMxN2RjM2Q5MDgxNDg4YTZkNiJ9.T9xnbQR86Nnb4-iwS3XN4hkaDUcCx0hND_PrHMM6IjE', { external: true })
-// }
+
 </script>
 <style scoped>
 iframe {

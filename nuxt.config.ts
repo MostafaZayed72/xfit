@@ -2,6 +2,12 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
+   devServer:{
+      https:{
+         key:'./localhost-key.pem',
+         cert:'./localhost.pem'
+      }
+   },
    
    devtools: { enabled: true },
    base: '/nuxt-app/',

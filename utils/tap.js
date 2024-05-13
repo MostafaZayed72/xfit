@@ -12,7 +12,7 @@ export default{
       
          var style = {
             base: {
-               color: '#535353',
+               color: '#03b3d1',
                lineHeight: '18px',
                fontFamily: 'sans-serif',
                fontSmoothing: 'antialiased',

@@ -1,5 +1,6 @@
 <template>
    <section>
+      <div id="TabbyPromo" class="mx-auto"></div>
       <div class="mb-5">
          <label class="text-sm">{{ $t("Package", "الباقة") }}</label>
          <p>
@@ -13,7 +14,7 @@
             <span class="me-2">{{ membership?.price.toLocaleString() }}</span>
             <span>{{ $t("SAR", "ريال") }}</span>
          </p>
-         <div id="TabbyPromo"></div>
+         
       </div>
 
       <div class="mb-5">
