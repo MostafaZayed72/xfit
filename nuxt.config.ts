@@ -2,6 +2,7 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
+
    devServer:{
       https:{
          key:'./localhost-key.pem',
@@ -22,7 +23,7 @@ export default defineNuxtConfig({
       },
    ],
 
-   modules: ['@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'nuxt-icon',
+   modules: ['nuxt3-vuex-module','@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'nuxt-icon',
       (_options, nuxt) => {
          nuxt.hooks.hook('vite:extendConfig', (config) => {
             // @ts-expect-error

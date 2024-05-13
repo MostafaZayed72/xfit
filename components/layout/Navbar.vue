@@ -34,7 +34,7 @@
                      </nuxt-link>
                   </div>
                </div>
-
+               <ScrollToTop />
             </span>
             <span class="flex gap-6 items-center justify-center  lg:mr-6" v-else>
                <a href="javascript:;" @click="changeLanguage('ar')">

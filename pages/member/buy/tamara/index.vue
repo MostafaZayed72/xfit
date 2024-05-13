@@ -60,15 +60,16 @@
                         </p>
                      </label>
 
-                     <div class="text-end">
-                        <ButtonsPrimary class="w-24 bg-cyan-500 choose " @click="startTamaraPayment(payment_type.name)">
-                           {{ $t("Confirm", "تأكيد") }}
-                        </ButtonsPrimary>
-                     </div>
+                     
 
                   </div>
 
                </div>
+               <div class="text-end">
+                        <ButtonsPrimary class="w-24 bg-cyan-500 choose " @click="startTamaraPayment(selectedPaymentType)" >
+                           {{ $t("Confirm", "تأكيد") }}
+                        </ButtonsPrimary>
+                     </div>
                <!-- Confirm Button outside the v-for loop -->
 
             </div>

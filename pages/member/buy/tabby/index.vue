@@ -31,7 +31,7 @@
                {{ $t("Tabby payment options", "خيارات دفع تابي") }}
             </h4>
             <ButtonsPrimary class="w-24 bg-cyan-500 choose"
-                     @click="startTabbyPayment(payment_type.web_url)">
+                     @click="startTabbySession()">
                         {{ $t("Confirm", "تأكيد") }}
                      </ButtonsPrimary>
 
@@ -92,11 +92,9 @@ const rejectedMsg = $t("Sorry, Tabby is unable to approve this purchase. Please 
 
 onBeforeMount(() => {
    getMembership();
-   startTabbySession();
    //console.log(membership.value);
    //console.log();
 });
-
 
 
 
