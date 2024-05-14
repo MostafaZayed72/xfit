@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const state = () => ({
    lang: localStorage.getItem('lang') || 'ar',
    user_name: localStorage.getItem('user_name'),
@@ -110,9 +112,14 @@ export const actions = {
    },
 
    async viewTapCharge({ commit }, params) {
-      return await this.$axios.get('memberships/view-tap-charge', { params })
+      try {
+         const response = await axios.get('memberships/view-tap-charge', { params });
+         return response.data;
+      } catch (error) {
+         console.error('Error while fetching viewTapCharge:', error);
+         throw error;
+      }
    },
-
    async getTamaraPaymentTypes({ commit }, params) {
       return await this.$axios.get('tamara/payment-types', { params })
    },
