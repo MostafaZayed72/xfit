@@ -65,10 +65,10 @@
          </section>
       </div>
       <!-- Terms and conditions modal -->
-      <CommonModal :title="$t('Terms and conditions', 'الاحكام والشروط')" modalID="terms-and-conditions-modal">
+      <CommonModal class="main-card" :title="$t('Terms and conditions', 'الاحكام والشروط')" modalID="terms-and-conditions-modal">
          <div>
             <p v-for="term in membershipTerms" :key="term">
-               <small>{{ $t('Term', 'الشرط') }}</small>
+               <small>{{ $t(term) }}</small>
             </p>
             <CommonModalHR />
             <div class="text-end">

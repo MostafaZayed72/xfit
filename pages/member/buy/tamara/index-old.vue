@@ -118,7 +118,7 @@
       </div>
 
       <!-- Terms and conditions modal -->
-      <CommonModal
+      <CommonModal class="main-card"
          :title="$t('Terms and conditions', 'الاحكام والشروط')"
          modalID="terms-and-conditions-modal"
       >

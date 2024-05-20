@@ -71,6 +71,9 @@ const newUser = ref({
 const registerRequest = ref();
 const registerClicked = () => {
    registerRequest.value = useRegister(newUser.value);
+   
+   console.log(registerRequest.value)
+   
 };
 
 const loginRequest = ref();

@@ -27,9 +27,38 @@
 
          <section>
             <hr class="my-4" />
-            <h4 class="mb-5">
-               {{ $t("Tabby payment options", "خيارات دفع تابي") }}
-            </h4>
+            <div >
+               
+               <div v-if="rejected" class="text-red-500 border border-red-500 bg-red-100 p-2 my-3">{{ rejectedMsg }}</div>
+               <div v-if="!rejected" class="py-2" id="TabbyPromo"></div>
+
+               <div
+                  class="bg-[var(--c1)] rounded-xl"
+                  v-for="payment_type in tabbyPaymentOptions?.data
+                     .available_products"
+                  :key="payment_type.name"
+               >
+                  <div
+                     class="h-100 shadow-sm bg-light rounded-3 d-block p-4 text-center flex flex-col items-start gap-2 "
+                  >
+                  
+
+
+                    
+
+                     <div class="text-end">
+                        
+                        <ButtonsPrimary
+                           v-if="tabbyStatus === 'created'"
+                           class="w-24"
+                           @click="startTabbyPayment(payment_type.web_url)"
+                        >
+                           {{ $t("Confirm", "تأكيد") }}
+                        </ButtonsPrimary> 
+                     </div>
+                  </div>
+               </div>
+            </div>
             <ButtonsPrimary class="w-24 bg-cyan-500 choose"
                      @click="startTabbySession()">
                         {{ $t("Confirm", "تأكيد") }}
@@ -59,7 +88,7 @@
       </div>
 
       <!-- Terms and conditions modal -->
-      <CommonModal :title="$t('Terms and conditions', 'الاحكام والشروط')" modalID="terms-and-conditions-modal">
+      <CommonModal class="main-card" :title="$t('Terms and conditions', 'الاحكام والشروط')" modalID="terms-and-conditions-modal">
          <div>
             <p v-for="term in membershipTerms" :key="term">
                <small>{{ $t(term) }}</small>

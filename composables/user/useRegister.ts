@@ -8,7 +8,8 @@ type newUser = {
    password: string;
 };
 
-export const useRegister = (newUser: newUser) => {
+export const useRegister = async (newUser: newUser) => {
+   // التحقق من صحة المدخلات قبل الإرسال
    if (newUser.first_name == "")
       return notify("danger", ["يجب ادخال الاسم الاول"]);
 
@@ -18,10 +19,21 @@ export const useRegister = (newUser: newUser) => {
    if (newUser.mobile_phone == "")
       return notify("danger", ["يجب ادخال رقم الجوال"]);
 
-   if (!validatePassword(newUser.password)) return;
+   // التحقق من صحة كلمة المرور إذا كان هناك دالة validatePassword
+   // if (!validatePassword(newUser.password)) return;
 
-   return useCustomAxios("members/register", {
-      method: "POST",
-      data: newUser,
-   });
+   try {
+      const response = await useCustomAxios("members/register", {
+         method: "POST",
+         data: newUser,
+      });
+      
+      // التعامل مع الاستجابة الناجحة
+      notify("success", ["تم التسجيل بنجاح"]);
+      return response; // إرجاع الاستجابة إذا لزم الأمر
+   } catch (error : any) {
+      // التعامل مع الأخطاء
+      notify("danger", [error.response?.data.errors.mobile_phone || "حدث خطأ غير متوقع"]);
+      throw error; // إعادة رمي الخطأ ليتم التعامل معه لاحقًا
+   }
 };

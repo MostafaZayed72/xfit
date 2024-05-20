@@ -20,7 +20,7 @@
                   <Icon class="text-3xl" name="material-symbols:person-rounded" /> <span class="hidden md:block">{{
                      username }}</span>
                   <Icon name="ion:md-arrow-dropdown" />
-                  <div v-if="arabicOptions" class="options-container w-40 text-start ">
+                  <div v-if="arabicOptions" class="options-container w-40 text-start left-0">
                      <h1 class="font-bold mb-1 hover:bg-cyan-500 px-1 rounded w-100" @click="refreshPage">
                         <Icon class="text-xl" name="material-symbols:refresh-rounded" /> تحديث النظام
                      </h1>
@@ -48,7 +48,7 @@
                   <Icon class="text-3xl" name="material-symbols:person-rounded" /> <span class="hidden md:block">{{
                      username }}</span>
                   <Icon name="ion:md-arrow-dropdown" />
-                  <div v-if="englishOptions" class="options-container w-40 text-start">
+                  <div v-if="englishOptions" class="options-container w-40 text-start right-0">
                      <h1 class="font-bold mb-1 hover:bg-cyan-500 px-1 rounded w-100" @click="refreshPage">
                         <Icon class="text-xl" name="material-symbols:refresh-rounded" /> Refresh Page
                      </h1>
@@ -91,7 +91,6 @@ const changeLanguage = (newLanguage) => {
 .options-container {
    position: absolute;
    top: 100%;
-   left: 0;
    display: none;
    background-color: white;
    padding: 0.5rem;

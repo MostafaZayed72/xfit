@@ -240,17 +240,7 @@ const updateRecord = (field) => {
 watch(
    () => updateFieldRequest.value?.isFinished,
    () => {
-      watch(email, (val) => {
-   window.localStorage.setItem("email", val)
-})
-
-watch(phone, (val) => {
-   window.localStorage.setItem("phone", val)
-})
-
-watch(national, (val) => {
-   window.localStorage.setItem("national", val)
-})
+      
 
       if (
          updateFieldRequest.value.isFinished &&
@@ -305,20 +295,8 @@ watch(
 );
 
 
-   window.localStorage.setItem("email", email.value),
-   window.localStorage.setItem("national", national.value)
+   
 
 
-watch(email, (val) => {
-   window.localStorage.setItem("email", val)
-})
-
-watch(phone, (val) => {
-   window.localStorage.setItem("phone", val)
-})
-
-watch(national, (val) => {
-   window.localStorage.setItem("national", val)
-})
 
 </script>

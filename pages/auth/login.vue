@@ -35,6 +35,11 @@
                {{ $t("New account", 'حساب جديد') }}
             </nuxt-link>
          </div>
+         <div class="text-center">
+            <nuxt-link to="/auth/forget-password" class="text-sm">
+               {{ $t("Forgot Password", 'نسيت كلمة المرور ؟ ') }}
+            </nuxt-link>
+         </div>
       </form>
    </div>
 </template>

@@ -14,7 +14,6 @@
             <span class="me-2">{{ membership?.price.toLocaleString() }}</span>
             <span>{{ $t("SAR", "ريال") }}</span>
          </p>
-         
       </div>
 
       <div class="mb-5">
@@ -52,18 +51,20 @@ const { $t } = useNuxtApp();
 
 const currentLanguage = useCookie("lang");
 
-onMounted(()=>{
-   const price = props.membership?.price
-   //const lang = $t("en", "ar") 
+onMounted(() => {
+   const price = props.membership?.price;
+   //const lang = $t("en", "ar")
 
-   tabbyPromo.tabbysnippet('SAR',price,currentLanguage.value)
-})
-
-watch(()=>currentLanguage.value,()=>{
-   const price = props.membership?.price
-
-   tabbyPromo.tabbysnippet('SAR',price,currentLanguage.value)
-   console.log(currentLanguage.value)
-
+   tabbyPromo.tabbysnippet("SAR", price, currentLanguage.value);
 });
+
+watch(
+   () => currentLanguage.value,
+   () => {
+      const price = props.membership?.price;
+
+      tabbyPromo.tabbysnippet("SAR", price, currentLanguage.value);
+      console.log(currentLanguage.value);
+   }
+);
 </script>
