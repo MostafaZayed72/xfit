@@ -2,16 +2,15 @@
    <main class="container">
       <div class="row">
          <div class="col-xs-8 offset-xs-2 col-md-4 offset-md-4">
-            
-            <p class="text-center">{{ $t('Password reset') }}</p>
+            <p class="text-center">{{ $t("Password reset") }}</p>
             <form action="javascript:;" id="auth" @submit.prevent="submit()">
-               <div class="my-3 text-center" >
-                  <label class="form-label" >
+               <div class="my-3 text-center">
+                  <label class="form-label">
                      <!-- {{ $t('Please, enter your email or mobile phone') }} -->
-                     {{ $t('Enter your email') }}
+                     {{ $t("Enter your email") }}
                   </label>
                   <input
-                  style="border: 1px solid;"
+                     style="border: 1px solid"
                      type="text"
                      class="form-control rounded"
                      v-model="value"
@@ -20,12 +19,17 @@
                   />
                </div>
             </form>
-            <div class=" flex gap-2 justify-center">
-               <button type="submit" class="w-24 bg-cyan-500 choose" form="auth">
-                  {{ $t('Confirm') }}
+            <div class="flex gap-2 justify-center">
+               <button
+                  @click="submit"
+                  type="submit"
+                  class="w-24 bg-cyan-500 choose"
+                  form="auth"
+               >
+                  {{ $t("Confirm") }}
                </button>
                <nuxt-link class="btn btn-secondary" to="/auth/login">
-                  {{ $t('Back') }}
+                  {{ $t("Back") }}
                </nuxt-link>
             </div>
          </div>
@@ -35,41 +39,28 @@
 
 <script setup>
 definePageMeta({ layout: "auth" });
+const value = ref("");
+const router = useRouter();
+import { notify } from "@/composables/common/useNotifications";
+import { useCustomAxios } from "@/composables/common/useCustomAxios";
 
-// export default {
-//    auth: false,
-//    layout: 'auth',
-//    data() {
-//       return {
-//          value: '',
-//       }
-//    },
-//    mounted() {
-//       if (this.$auth.loggedIn) this.$router.push('/')
-//    },
-//    methods: {
-//       submit() {
-//          // if (this.value == '') return
+// onMounted(() => {
+//    if (loggedIn.value) router.push("/");
+// });
 
-//          // if (
-//          //    !this.$validateEmail(this.value) &&
-//          //    this.value.substring(0, 1) == '0'
-//          // )
-//          //    return
-//          if (!this.$validateEmail(this.value)) return
+const submit = async () => {
 
-//          this.$store
-//             .dispatch('resetPassword', this.value)
-//             .then(() => {
-//                this.$router.push('/auth/login')
-//                this.$notify('success', [this.$t('A new password has been sent to your email')])
-//             })
-//             .catch(() => {
-//                this.$notify('danger', [this.$t('Please, try again later.')])
-//             })
-//       },
-//    },
-// }
+   try {
+      await useCustomAxios('members/reset-password?v=' + value.value, {
+         method: "POST",
+         v: value.value
+      });
+      router.push("/auth/login");
+      notify("success", ["A new password has been sent to your email"]);
+   } catch (error) {
+      notify("danger", [error.response.data.message]);
+   }
+};
 </script>
 
 <style scoped>

@@ -1,5 +1,5 @@
 <template>
-   <div >
+   <div>
       <h3 class="text-2xl text-center mb-4">
          {{ $t("Log in", 'تسجيل الدخول') }}
       </h3>
@@ -7,8 +7,9 @@
       <form @submit.prevent="loginClicked">
          <div class="form-group mb-2">
             <input
+               style="border: 1px solid #b5bac3"
                type="text"
-               class="w-full h-12 bg-[var(--c3)]"
+               class="w-full h-12"
                :placeholder="$t('Email or mobile phone', 'البريد الالكتروني او الجوال')"
                v-model="user.emailOrMobilePhone"
                autofocus
@@ -16,8 +17,9 @@
          </div>
          <div class="form-group mb-2">
             <input
+               style="border: 1px solid #b5bac3"
                type="password"
-               class="w-full h-12 bg-[var(--c3)]"
+               class="w-full h-12"
                :placeholder="$t('Password', 'كلمة المرور')"
                v-model="user.password"
             />
@@ -26,7 +28,7 @@
             <ButtonsPrimary
                class="w-full min-h-[3rem] h-auto"
                :isLoading="loginRequest?.isLoading"
-               >
+            >
                {{ $t("Log in", 'تسجيل الدخول') }}
             </ButtonsPrimary>
          </div>
@@ -55,7 +57,21 @@ const user = ref({
 });
 
 const loginRequest = ref();
+
+const removeLeadingZero = (input) => {
+   const str = input.toString();
+   if (str.startsWith('0')) {
+      return str.slice(1);
+   }
+   return str;
+};
+
 const loginClicked = () => {
+   user.value.emailOrMobilePhone = removeLeadingZero(user.value.emailOrMobilePhone);
+
+   // طباعة قيمة الحقل للتحقق من وجود الأصفار في البداية
+   console.log('Email or Mobile Phone:', user.value.emailOrMobilePhone);
+   
    loginRequest.value = login(user.value);
 };
 

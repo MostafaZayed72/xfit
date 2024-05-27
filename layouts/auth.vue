@@ -1,4 +1,5 @@
 <template>
+   <div class=" flex justify-center"><ColorMode class="mt-10"/></div>
    <div :dir="currentLanguage == 'ar' ? 'rtl' : 'ltr'">
       <div class="grid place-items-center h-screen">
          <div class="container p-8 sm:w-1/2">

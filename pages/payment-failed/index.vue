@@ -1,19 +1,7 @@
 <template>
    <section class="parent">
-      <CommonXfitLoader
-         v-if="
-            !success &&
-            successTamara != 'authorised' &&
-            successTabby != 'AUTHORIZED'
-         "
-      />
-      <div
-         v-if="
-            success ||
-            successTamara == 'authorised' ||
-            successTabby == 'AUTHORIZED'
-         "
-      >
+      <CommonXfitLoader v-if="!success" />
+      <div v-if="success">
          <h3 class="display-6 mb-5">
             {{ $t("Thank you", "شكرا لك") }}
          </h3>
@@ -31,17 +19,42 @@
          <!-- <h1>hello {{ membershipId }}</h1> -->
          <div v-for="membership in memberships?.data" :key="membership.id">
             <ButtonsPrimary
-               v-if="
-                  membership.id === membershipId ||
-                  membership.id == tamaraId ||
-                  membership.id == tabbyId
-               "
+               v-if="membership.id === membershipId"
                @click="viewMembership(membership.id)"
                class="bg-cyan-500 choose cursor-pointer w-fit mt-6"
             >
                {{ $t("Membership Preview", "معاينة الإشتراك") }}
             </ButtonsPrimary>
          </div>
+      </div>
+      <div v-if="success == false">
+         <h3 class="display-6 mb-5">
+            {{ $t("Sorry To You", "نأسف لك") }}
+         </h3>
+         <p>
+            {{
+               $t(
+                  "Something went wrong, payment not completed",
+                  "حدث خطأ ما، ولم يكتمل الدفع"
+               )
+            }}
+         </p>
+         <p>
+            {{
+               $t(
+                  "try again later or use another payment method",
+                  "حاول مرة أخرى لاحقًا أو استخدم طريقة دفع أخرى"
+               )
+            }}
+         </p>
+         <!-- <h1>hello {{ membershipId }}</h1> -->
+         <NuxtLink to="/packages">
+            <ButtonsPrimary
+               class="bg-cyan-500 choose cursor-pointer w-fit mt-6"
+            >
+               {{ $t("Return to packages page", "العودة لصفحة الباقات") }}
+            </ButtonsPrimary></NuxtLink
+         >
       </div>
    </section>
 </template>
@@ -72,11 +85,8 @@ const order_id = router.currentRoute.value.query.orderId;
 const payment_status = router.currentRoute.value.query.paymentStatus;
 const charge_id = router.currentRoute.value.query.tap_id;
 const success = ref();
-const successTamara = ref();
-const successTabby = ref();
+
 const membershipId = ref();
-const tamaraId = ref();
-const tabbyId = ref();
 async function viewTapCharge() {
    try {
       const res = await useCustomAxios("memberships/view-tap-charge", {
@@ -97,54 +107,17 @@ async function viewTapCharge() {
 }
 
 async function viewTamaraSession() {
-   const res = await useCustomAxios("memberships/view-tamara-session", {
+   await useCustomAxios("memberships/view-tamara-session", {
       params: { order_id: order_id, payment_status: payment_status },
    });
-   successTamara.value = res.data.value.payment_status;
-   console.log(res.data.value.membership_id);
-   tamaraId.value = res.data.value.membership_id;
-}
-import { useRoute } from 'vue-router';
-import { useGetTabbySession } from "@/composables/tabby/useGetTabbySession";
-import { useState } from '#app';
-
-const route = useRoute();
-const record = ref(null);
-const membershipID = useState("membershipID");
-
-async function viewTabbySession() {
-  if (route.query.payment_id) {
-    record.value = await useGetTabbySession(
-      route.query.payment_id,
-      "AUTHORIZED"
-    );
-
-    // تحقق إذا كانت الجلسة قد استرجعت بنجاح
-    if (record.value) {
-      // يمكنك الآن تنفيذ العمليات المطلوبة
-      console.log('Tabby session:', record.value.response.data);
-      successTabby.value = record.value.response.data.payment_status;
-tabbyId.value = record.value.response.data.membership_id;
-      
-    } else {
-      console.error('Failed to fetch Tabby session');
-    }
-  } else {
-    console.error('Payment ID is missing in the route query');
-  }
 }
 
-// استدعاء الدالة لعرض الجلسة
-viewTabbySession();
 if (charge_id) {
    viewTapCharge();
 }
 if (order_id) {
    viewTamaraSession();
 }
-// if (charge_id) {
-//    viewTabbySession();
-// }
 </script>
 
 <style scoped>

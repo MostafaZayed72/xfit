@@ -21,7 +21,7 @@ export const useRegister = async (newUser: newUser) => {
 
    // التحقق من صحة كلمة المرور إذا كان هناك دالة validatePassword
    // if (!validatePassword(newUser.password)) return;
-
+const myErr= ref()
    try {
       const response = await useCustomAxios("members/register", {
          method: "POST",
@@ -33,7 +33,7 @@ export const useRegister = async (newUser: newUser) => {
       return response; // إرجاع الاستجابة إذا لزم الأمر
    } catch (error : any) {
       // التعامل مع الأخطاء
-      notify("danger", [error.response?.data.errors.mobile_phone || "حدث خطأ غير متوقع"]);
-      throw error; // إعادة رمي الخطأ ليتم التعامل معه لاحقًا
+     myErr.value =error.response?.data.errors.mobile_phone
+      return myErr; // إعادة رمي الخطأ ليتم التعامل معه لاحقًا
    }
 };

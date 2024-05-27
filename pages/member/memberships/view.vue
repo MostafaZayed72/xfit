@@ -26,7 +26,8 @@
          <section
             v-if="
                !membership?.data?.membershipTapPayments &&
-               !membership?.data?.membershipTamaraPayments
+               !membership?.data?.membershipTamaraPayments &&
+               !membership?.data?.membershipTabbyPayments
             "
          >
             <!--START PROMO CODE -->
@@ -51,8 +52,9 @@
                </ButtonsPrimary>
             </div>
             <div
-            v-if="membership.data.promo_code != null "
-            class="flex flex-col md:flex-row items-center gap-4">
+               v-if="membership.data.promo_code != null"
+               class="flex flex-col md:flex-row items-center gap-4"
+            >
                <h1>
                   {{
                      $t(
@@ -62,7 +64,7 @@
                   }}
                   "{{ membership.data.promo_code }}"
                   {{ $t("price after discount : ", "السعر بعد الخصم : ") }}
-                  {{ membershipAfterPromo }} {{ $t("SAR", "ريال") }}
+                  {{ membership.data.price }} {{ $t("SAR", "ريال") }}
                </h1>
                <ButtonsPrimary
                   class="w-fit bg-cyan-500 choose"
@@ -135,7 +137,7 @@
                   </ButtonsPrimary>
                </div>
             </div>
-            <div v-if="requiredData">
+            <!-- <div v-if="requiredData">
                <h1 class="bg-red-darken-1 py-2 px-2 rounded mb-4">
                   Please, complete your personal information. Go to your
                   profile, and make sure you entered your phone number, email
@@ -151,7 +153,7 @@
                      >من هنا</NuxtLink
                   >
                </h1>
-            </div>
+            </div> -->
             <div
                class="alert alert-danger text-center"
                v-if="!membership?.data?.package_status"
@@ -179,6 +181,28 @@
             <h4 class="mb-4">
                {{ $t("Payment information", "معلومات الدفع") }}
             </h4>
+            <div v-if="membership.data.membershipTabbyPayments">
+               <div class="row mb-3">
+                  <div class="col-sm-3">
+                     {{ $t("Payment method", "طريقة الدفع") }}
+                  </div>
+                  <div class="col-sm-9">
+                     {{ membership.data.membershipTabbyPayments.payment_status }}
+                  </div>
+               </div>
+               <div class="row mb-3">
+                  <div class="col-sm-3">{{ $t("Card", "بطاقة") }}</div>
+                  <div class="col-sm-9">
+                     <span dir="ltr">
+                        **** **** ****
+                        {{
+                           membership.data.membershipTabbyPayments
+                              .card_last_four_digits
+                        }}
+                     </span>
+                  </div>
+               </div>
+            </div>
             <div v-if="membership.data.membershipTapPayments">
                <div class="row mb-3">
                   <div class="col-sm-3">
@@ -281,8 +305,7 @@ onBeforeMount(() => {
 
 async function applyPromoCode() {
    try {
-      
-      membership.value.data.promo_code = promo.value;
+      // membership.value.data.promo_code = promo.value;
       if (!membership.value?.data || !promo.value) {
          return notify("danger", ["Please provide all required data"]);
       }
@@ -300,9 +323,10 @@ async function applyPromoCode() {
       if (res.data.value.errors) {
          throw res.data.value.errors;
       }
-      membershipAfterPromo.value = res.data.value.price;
+      membership.value.data.promo_code = promo.value;
+      membership.value.data.price = res.data.value.price;
       priceBefore.value = res.data.value.price_before_discount;
-      promo.value = res.data.value.promo_code;
+      // promo.value = res.data.value.promo_code;
       confirmed.value = true;
       notify("success", ["Promo code applied"]);
    } catch (error) {
@@ -331,7 +355,6 @@ async function removePromoCode() {
       if (res.data.value.errors) {
          throw res.data.value.errors;
       }
-      
 
       membership.value = res;
       confirmed.value = false;
