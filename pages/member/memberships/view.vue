@@ -187,19 +187,28 @@
                      {{ $t("Payment method", "طريقة الدفع") }}
                   </div>
                   <div class="col-sm-9">
-                     {{ membership.data.membershipTabbyPayments.payment_status }}
+                     {{ $t("Tabby", "تابي") }}
                   </div>
                </div>
                <div class="row mb-3">
-                  <div class="col-sm-3">{{ $t("Card", "بطاقة") }}</div>
+                  <div class="col-sm-3">{{ $t("Order ID", "رقم الطلب") }}</div>
                   <div class="col-sm-9">
                      <span dir="ltr">
-                        **** **** ****
                         {{
                            membership.data.membershipTabbyPayments
-                              .card_last_four_digits
+                              .order_id
                         }}
                      </span>
+                  </div>
+               </div>
+               <div class="row mb-3">
+                  <div class="col-sm-3">
+                     {{ $t("Payment status", "حالة الدفع") }}
+                  </div>
+                  <div class="col-sm-9">
+                     {{
+                        membership.data.membershipTabbyPayments.payment_status
+                     }}
                   </div>
                </div>
             </div>
